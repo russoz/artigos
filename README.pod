@@ -1,0 +1,6 @@
+=encoding utf8
+
+=head1 ARTIGOS
+
+Repositório que eu use para escrever artigos, independente
+do assunto que eu escolher.
