@@ -1,8 +1,14 @@
 =encoding utf8
 
-=head1 TITLE
+=head1 Tuitando
 
-yadayadayada
+=head1 OAUTH
+
+chave da aplicação, chave de sessão, storage das chaves
+
+=head1 encoding
+
+=head1 datas
 
 =head2 Referências
 
