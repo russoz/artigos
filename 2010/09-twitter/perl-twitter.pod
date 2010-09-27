@@ -1,0 +1,70 @@
+=encoding utf8
+
+=head1 TITLE
+
+yadayadayada
+
+=head2 Referências
+
+=over 4
+
+=item Net::Twitter
+
+L<Net::Twitter>
+
+=item Net::Twitter::Role::OAuth
+
+L<Net::Twitter::Role::OAuth>
+
+=item "Social Coding: How to Code Twitter’s OAuth Using Net::OAuth and Perl", Jesse Stay
+
+L<http://staynalive.com/articles/social-coding-how-to-code-twitters-oauth-using-netoauth-and-perl/>
+
+=item utf8
+
+L<utf8>
+
+=item "Character Encodings in Perl", Moritz Lenz
+
+L<http://perlgeek.de/en/article/encodings-and-unicode>
+
+=item Storable
+
+L<Storable>
+
+=item DateTime
+
+L<DateTime>
+
+=item "TIPS/TRICKS COM 'DATAS'", Daniel Mantovani
+
+L<http://sao-paulo.pm.org/equinocio/2010/set/16>
+
+=back
+
+=head2 Agradecimentos
+
+=head2 Autor
+
+Alexei "Russo" Znamensky E<lt> russoz no cpan org E<gt>
+
+Blog: L<http://russoz.wordpress.com/>
+
+LinkedIn:
+L<http://www.linkedin.com/profile?viewProfile=&key=754668&trk=tab_pro>
+
+=head2 Licença
+
+Este texto está licenciado sob os termos da Creative Commons by-sa,
+L<http://creativecommons.org/licenses/by-sa/3.0/br/>
+
+=begin pod:xhtml
+
+<center>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/br/"><img alt="Licença Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/br/">Creative Commons Attribution-ShareAlike License</a>.
+</center>
+
+=end pod:xhtml
+
+=cut
+
