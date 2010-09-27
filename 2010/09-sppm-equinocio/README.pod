@@ -1,6 +1,6 @@
 =encoding utf8
 
-Apesar de eu ter trabalho com o nome 17.pod, pois essa era a expectativa que
+Apesar de eu ter trabalhado com o nome 17.pod, pois essa era a expectativa que
 eu tinha da data em que o artigo seria publicado, na verdade ele acabou saindo
 apenas no dia 18. Veja o artigo no site da SPPM em:
 
