@@ -1,5 +1,11 @@
 =encoding utf8
 
+=head1 De onde veio isso?
+
+Um dia, eu estava reclamando da vida - da vida no Twitter. A L<resposta|http://miud.in/e2R> foi parecida com: levante o seu traseiro gordo daí e faça alguma coisa. Escrito de outra forma, mas foi. Isso ficou rebatendo na minha mente um bom tempo, então como eu já não aguentava mais pensar no assunto sem ter feito nada - e o twitter continua mandando um monte de asneiras que não me interessavam - decidi que era hora de tomar uma atitude: escrevi (ou pelo menos comecei a escrever) um client para o Twitter, em perl.
+
+Ainda estou longe de ter o cliente que imaginei quando escrevi aquele comentário no L<facebook|www.facebook.com>, mas já descobri várias coisas no caminho, e este artigo pretende compartilhar um pouco dessas descobertas.
+
 =head1 Tuitando
 
 =head1 OAUTH
