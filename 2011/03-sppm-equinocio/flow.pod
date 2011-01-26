@@ -1,8 +1,35 @@
 =encoding utf8
 
-=head1 TITLE
+=head1 OpenData::Flow - um framework para fluxo de dados
 
-yadayadayada
+=head2 OpenData
+
+Tudo começou com um e-mail na L<lista da SP-PM|http://sao-paulo.pm.org/lista>,
+no qual se falou de "hackear" dados públicos. 
+Isso virou uma idéia de produzir um framework para buscar e 
+analisar dados públicos. 
+Logo, o L<Thiago Rondon|http://www.maluco.com.br/blog/> montou um 
+L<repositório no GitHub|https://github.com/maluco/OpenData-BR> e começou a 
+rabiscar umas idéias de código.
+
+O L<OpenData-BR|http://www.opendatabr.org/> ainda tem um status de 
+I<work in progress>, mas as expectativas e as perspectivas são muito 
+animadoras.
+ 
+=head2 Primeiras Idéias
+
+=head3 buscar dados na web -> 'scrape'
+
+=head3 primeiras implementações com codigo
+
+    -> pouco modularizado
+
+=head3 ETL - extract transform load
+
+    -> classes  extractor, transformer, loader
+    -> quanto mais desenvolviamos, mais parecia com um fluxo de dados
+
+em dd/mm, começou a implantacao do data flow
 
 =head2 Referências
 
