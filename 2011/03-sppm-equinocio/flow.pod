@@ -18,22 +18,62 @@ animadoras.
  
 =head2 Primeiras Idéias
 
-=head3 buscar dados na web -> 'scrape'
+=head3 Buscar dados na web (scrape)
 
-=head3 primeiras implementações com codigo
+A primeira idéia a ser implementada foi a lógica de buscar dados na web. Na
+lista, ou no canal #saopaulo.pm no irc.perl.org, surgiram as primeiras
+indicações de sites onde a informação estava disponibilizada. Um dos sites
+primariamente visados foi o
+L<PortalTransparencia|http://www.portaltransparencia.gov.br/>, o site do
+governo federal para promover a transparência nos dados do governo.
 
-    -> pouco modularizado
+Seguindo a metodologia opensource I<"release early, release often">, o
+projeto começou a disponibilizar código que - efetivamente - conseguia buscar
+dados. No entanto, esse código inicialmente não fazia muitas provisões
+para manutenção e extensão no futuro.
 
 =head3 ETL - extract transform load
 
-    -> classes  extractor, transformer, loader
-    -> quanto mais desenvolviamos, mais parecia com um fluxo de dados
+Surgiu então uma tentativa de modularizar melhor o B<OpenData-BR>, dividindo-o
+em 3 tipos de componentes:
 
-em dd/mm, começou a implantacao do data flow
+=over
+
+=item * Extractors
+
+Extratores de dados. Basicamente a idéia seria que todos os scrapers, sejam
+web ou não, na forma que forem, seriam um tipo de Extractor.
+
+=item * Transformers
+
+Robôs assassinos que se transformam em carros ou outras máquinas fantásticas.
+OK, não precisavam rir mesmo. Componentes que iriam conter toda a lógica de
+B<transformação> dos dados, dos documentos originais para os dados buscados.
+
+=item * Loaders
+
+Seriam os I<end-points> do processo de extração dos dados, e a principal
+tarefa de um I<Loader> seria gravar os dados em algum lugar. Os primeiros
+testes gravavam esses daods em um banco de dados MongoDB, ou imprimiam os
+dados obtidos usando o L<Data::Dumper> (para debug).
+
+=back
+
+=head2 Flow, Baby, Flow
+
+Quanto mais pensávamos no framework, mais ele se parecia com um fluxo de dados,
+do começo (extractors) ao meio (transformers), ao fim (loaders). Assim surgiu a
+idéia de fazer um sub-projeto de fluxo de dados.
+
+Em meados de Dezembor de 2010, a primeira idéia foi codificada em termos de
+"caixas", que teriam um entrada e uma saída - de uma forma bem gnérica: 
+"entra porquinho, sai salsicha".
 
 =head2 Referências
 
 =over 4
+
+=item * Portal Transparência (L<http://www.portaltransparencia.gov.br/>)
 
 =back
 
