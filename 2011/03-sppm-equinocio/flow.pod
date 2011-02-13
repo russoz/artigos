@@ -10,11 +10,9 @@ Isso virou uma idéia de produzir um framework para buscar e
 analisar dados públicos. 
 Logo, o L<Thiago Rondon|http://www.maluco.com.br/blog/> montou um 
 L<repositório no GitHub|https://github.com/maluco/OpenData-BR> e começou a 
-rabiscar umas idéias de código.
-
-O L<OpenData-BR|http://www.opendatabr.org/> ainda tem um status de 
-I<work in progress>, mas as expectativas e as perspectivas são muito 
-animadoras.
+rabiscar umas idéias de código.  O L<OpenData-BR|http://www.opendatabr.org/>
+ainda tem um status de I<work in progress>, mas as expectativas e as
+perspectivas são muito animadoras.
  
 =head2 Primeiras Idéias
 
@@ -65,13 +63,87 @@ Quanto mais pensávamos no framework, mais ele se parecia com um fluxo de dados,
 do começo (extractors) ao meio (transformers), ao fim (loaders). Assim surgiu a
 idéia de fazer um sub-projeto de fluxo de dados.
 
-Em meados de Dezembor de 2010, a primeira idéia foi codificada em termos de
-"caixas", que teriam um entrada e uma saída - de uma forma bem gnérica: 
+Em meados de Dezembro de 2010, a primeira idéia foi codificada em termos de
+"caixas", que teriam um entrada e uma saída - de uma forma bem genérica: 
 "entra porquinho, sai salsicha".
+
+=for picture: porquinho -> caixa -> salsicha
+
+E as caixas poderiam ser enfileiradas para que a salsicha de um pudesse virar
+a feijoada do próximo.
+
+Assim surgiu, dentro do repositório do B<OpenData>, o sub-projeto que foi,
+inicialmente, denominado de I<"Box">. Depois se tornou o I<"Flow"> e, enquanto
+escrevo este artigo, tornou-se um projeto independente, o I<"DataFlow">.
+
+=head2 Show Me The Node
+
+B<DISCLAIMER>: O L<DataFlow> é um projeto que está em um estágio muito novo
+do seu desenvolvimento, e por enquanto não há promessas ou garantias de que
+as interfaces serão mantidas. Se há interesse em usar o DataFlow, sugiro
+acompanhar de perto o desenvolvimento do mesmo para ficar a par de quaisquer
+mudanças.
+
+Um exemplo básico de um node que transforma os dados para caixa-alta (
+I<upper-case>), usando a função C<< uc() >> padrão do Perl.
+
+    my $uc = DataFlow::Node->new(
+        process_item => sub {
+            shift; return uc(shift);
+        }
+    );
+
+Isso é um I<node> que irá transformar os itens fornecidos para caixa-alta. As
+próximas perguntas são: Como eu uso? O que eu posso passar para esse node? As
+respostas são:
+
+    # em duas etapas
+    $uc->input( 'laranja' );
+    my $out = $uc->output();  # LARANJA
+
+    # ou em um unica etapa
+    my $out = $uc->process('laranja');
+
+    # podemos passar arrays
+    my @out = $uc->process( qw/feira da fruta/ ); # qw/FEIRA DA FRUTA/
+
+    # podemos passar referencias
+    my $out = $uc->process( [ 'oh', 'my', 'god' ] );
+
+B<PEGADINHA>: nesta última forma, os elementos do ArrayRef NÃO serão
+transformados você pode ter um node que espera de fato uma ref e trata a
+mesma de acordo com suas próprias regras. O mesmo se aplica a outros tipos
+de referência. Se você quer que o node processe a informação B<dentro> da
+referência, use:
+
+    my $uc = DataFlow::Node->new(
+        process_into => 1,
+        process_item => sub {
+            shift; return uc(shift);
+        }
+    );
+
+    my $out = $uc->process( [ qw/oh my god/ ] );
+    # resultado: [ 'OH', 'MY', 'GOD' ]
+
+    my $ou = $uc->process( { a => 'value', another => 'different value' } );
+    # resultado { a => 'VALUE', another => 'DIFFERENT VALUE' } );
+    
+Também podemos passar I<code references> para serem processadas (usando o
+C<process_into>):
+
+    my $code = sub { return 'batatas' };
+    my $out = $uc->process( $code );
+    print $out->(); # imprime 'BATATAS'
+
+Notem que, quando são passadas referências, sempre são retornadas referências
+do mesmo tipo.
+
+=head2 E Pra Que serve Tudo Isso?
 
 =head2 Referências
 
-=over 4
+=over
 
 =item * Portal Transparência (L<http://www.portaltransparencia.gov.br/>)
 
@@ -79,9 +151,16 @@ Em meados de Dezembor de 2010, a primeira idéia foi codificada em termos de
 
 =head2 Agradecimentos
 
+=over
+
+=item Thiago "Maluco" Rondon - E<lt> thiago em aware ponto com ponto br E<gt>
+
+Pelos testes, pelas idéias e pelas dicussões em horários excusos. Muitas das
+idéias do L<DataFlow> germinaram a partir desses momentos.
+
 =head2 Autor
 
-Alexei "Russo" Znamensky E<lt> russoz no cpan org E<gt>
+Alexei "Russo" Znamensky - E<lt> russoz no cpan org E<gt>
 
 Blog: L<http://russoz.wordpress.com/>
 
