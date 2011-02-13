@@ -1,6 +1,6 @@
 =encoding utf8
 
-=head1 OpenData::Flow - um framework para fluxo de dados
+=head1 OpenData::Flow - um Framework Para Fluxo de Dados
 
 =head2 OpenData
 
@@ -58,8 +58,11 @@ dados obtidos usando o L<Data::Dumper> (para debug).
 =head3 Flow, Baby, Flow
 
 Quanto mais pensávamos no framework, mais ele se parecia com um fluxo de dados,
-do começo (extractors) ao meio (transformers), ao fim (loaders). Assim surgiu a
-idéia de fazer um sub-projeto de fluxo de dados.
+do começo (extractors) ao meio (transformers), ao fim (loaders).
+Todos os componentes pareciam, de uma forma genérica, ter o mesmo
+comportamento: recebe algo na entrada, faz alguma coisa com esses dados, e
+(eventualmente) disponibiliza esses dados em uma saída.
+Assim surgiu a idéia de fazer um sub-projeto de fluxo de dados.
 
 Em meados de Dezembro de 2010, a primeira idéia foi codificada em termos de
 "caixas", que teriam um entrada e uma saída - de uma forma bem genérica: 
@@ -139,7 +142,36 @@ do mesmo tipo. Neste último caso C<$out> contém um I<code reference> que,
 ao ser invocado, aplica a função C<uc()> ao resultado do I<code reference>
 passado ao node.
 
+=head3 Chains
+
+Um node sozinho não faz um hack, então é preciso "enfileirar" os nodes para
+conseguir obter um resultado significativo. Para isso temos a classe
+C<DataFlow::Node::Chain>, que pode ser usada assim:
+
+    my $uc = DataFlow::Node->new(
+        process_item => sub { shift; return uc(shift) }
+    );
+    my $rv = DataFlow::Node->new(
+        process_item => sub { shift; return scalar reverse $_[0]; }
+    );
+    my $chain = DataFlow::Node::Chain->new( links => [ $uc, $rv ] );
+
+Um objeto da classe C<Chain> é também um C<Node>
+
+=head3 Biblioteca de Nós
+
+Algumas operações são mais comuns, e nodes especializados podem ser criados
+para executar processamentos específicos:
+
+=over
+
+=item 
+
+=back
+
 =head2 E Pra Que serve Tudo Isso?
+
+
 
 =head2 Referências
 
