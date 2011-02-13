@@ -35,20 +35,18 @@ para manutenção e extensão no futuro.
 Surgiu então uma tentativa de modularizar melhor o B<OpenData-BR>, dividindo-o
 em 3 tipos de componentes:
 
-=over
-
-=item * Extractors
+=head4 Extractors
 
 Extratores de dados. Basicamente a idéia seria que todos os scrapers, sejam
 web ou não, na forma que forem, seriam um tipo de Extractor.
 
-=item * Transformers
+=head4 Transformers
 
 Robôs assassinos que se transformam em carros ou outras máquinas fantásticas.
 OK, não precisavam rir mesmo. Componentes que iriam conter toda a lógica de
 B<transformação> dos dados, dos documentos originais para os dados buscados.
 
-=item * Loaders
+=head4 Loaders
 
 Seriam os I<end-points> do processo de extração dos dados, e a principal
 tarefa de um I<Loader> seria gravar os dados em algum lugar. Os primeiros
@@ -57,7 +55,7 @@ dados obtidos usando o L<Data::Dumper> (para debug).
 
 =back
 
-=head2 Flow, Baby, Flow
+=head3 Flow, Baby, Flow
 
 Quanto mais pensávamos no framework, mais ele se parecia com um fluxo de dados,
 do começo (extractors) ao meio (transformers), ao fim (loaders). Assim surgiu a
@@ -110,9 +108,9 @@ respostas são:
     # podemos passar referencias
     my $out = $uc->process( [ 'oh', 'my', 'god' ] );
 
-B<PEGADINHA>: nesta última forma, os elementos do ArrayRef NÃO serão
-transformados você pode ter um node que espera de fato uma ref e trata a
-mesma de acordo com suas próprias regras. O mesmo se aplica a outros tipos
+B<PEGADINHA>: nesta última forma, os elementos do ArrayRef C<não> serão
+transformados, pois você pode ter um node que espera de fato uma I<reference>
+e a trata de acordo com suas próprias regras. O mesmo se aplica a outros tipos
 de referência. Se você quer que o node processe a informação B<dentro> da
 referência, use:
 
@@ -137,7 +135,9 @@ C<process_into>):
     print $out->(); # imprime 'BATATAS'
 
 Notem que, quando são passadas referências, sempre são retornadas referências
-do mesmo tipo.
+do mesmo tipo. Neste último caso C<$out> contém um I<code reference> que,
+ao ser invocado, aplica a função C<uc()> ao resultado do I<code reference>
+passado ao node.
 
 =head2 E Pra Que serve Tudo Isso?
 
