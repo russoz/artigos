@@ -156,20 +156,188 @@ C<DataFlow::Node::Chain>, que pode ser usada assim:
     );
     my $chain = DataFlow::Node::Chain->new( links => [ $uc, $rv ] );
 
-Um objeto da classe C<Chain> é também um C<Node>
+Um objeto da classe C<Chain> é também um C<Node>, e funciona da mesma forma:
+
+	$chain->input( qw/abc def ghi/ );
+	my @result = $chain->output();
+	# @result == qw/CBA FED IHG/
 
 =head3 Biblioteca de Nós
 
 Algumas operações são mais comuns, e nodes especializados podem ser criados
-para executar processamentos específicos:
+para executar processamentos específicos. O pacote L<DataFlow>, contém ainda
+apenas um pequeno número dessas classes, mas com o tempo isso deve aumentar.
+Algun exemplos de classes já disponíveis hoje:
 
 =over
 
-=item 
+=item Chain
+
+Tipo especial de nó, que possui uma lista de nós, e concatena esses nós, de
+modo que os dados produzidos na saída de um nó são automaticamente injetados
+no próximo nó. Como um objeto da classe L<DataFlow::Chain> é também da classe
+L<DataFlow::Node>, ele também pode ser parte de uma outra cadeia de nós.
+
+=item CSV
+
+Nó que transforma array references em strings no formato CSV.
+
+=item Dumper
+
+Nó que utiliza o módulo L<Data::Dumper> para imprimir a estrutura de cada item
+para STDERR.
+
+=item HTMLFilter
+
+Nó utilizado para filtrar tags de um documento HTML utilizando
+L<HTML::TreeBuilder::XPath>. Pode produzir nodes (L<HTML::Element>), HTML ou
+somente os valores de tags e/ou atributos.
+
+=item LiteralData
+
+Nó que injeta na sua fila de entrada os parâmetros passados ao construtor.
+
+=item MultiPageURLGenerator
+
+Nó utilizado para gerar uma lista de URLs com os endereços de todas as páginas
+web de um conjunto de dados.
+
+=item NOP
+
+Nó "NO-OP". A informção sai do mesmo jeito que entrou. Pode ser utilizado como
+classe base para outras classes, ou apenas para alterar algum atributo do fluxo
+de dados.
+
+=item Null
+
+Nó que sempre retorna C<undef>.
+
+=item URLRetriever
+
+Nó que recebe URLs na entrada, e retorna o conteúdo das mesmas na saída.
 
 =back
 
-=head2 E Pra Que serve Tudo Isso?
+=head2 E Como Uso Tudo Isso?
+
+O L<DataFlow> surgiu do projeto L<OpenData-BR|http://www.opendatabr.org/>, e
+um dos usos para o qual ele foi pensado foi justamente a obtenção e manipulação
+de dados disponíveis em sites na web.
+
+Por exemplo, o script abaixo:
+
+	my $base = join( '/',
+	    q{http://www.portaltransparencia.gov.br},
+	    q{ceis}, q{EmpresasSancionadas.asp?paramEmpresa=0} );
+
+	my $chain = Chain->new(
+	    links => [
+	        LiteralData->new($base),
+	        MultiPageURLGenerator->new(
+	            first_page => -1,
+	            #last_page     => 35,
+	            produce_last_page => sub {
+	                my $url = shift;
+	
+	                use DataFlow::Node::URLRetriever::Get;
+	                use HTML::TreeBuilder::XPath;
+	
+	                my $get  = DataFlow::Node::URLRetriever::Get->new;
+	                my $html = $get->get($url);
+	
+	                my $texto =
+	                  HTML::TreeBuilder::XPath->new_from_content($html)
+	                  ->findvalue('//p[@class="paginaAtual"]');
+	                croak q{Não conseguiu determinar a última página}
+	                  unless $texto;
+	                return $1 if $texto =~ /\d\/(\d+)/;
+	            },
+	            make_page_url => sub {
+	                my ( $self, $url, $page ) = @_;
+	
+	                use URI;
+	
+	                my $u = URI->new($url);
+	                $u->query_form( $u->query_form, Pagina => $page );
+	                return $u->as_string;
+	            },
+	        ),
+	        NOP->new( deref => 1, ),
+	        URLRetriever->new( process_into => 1, ),
+	        HTMLFilter->new(
+	            process_into => 1,
+	            search_xpath =>
+	              '//div[@id="listagemEmpresasSancionadas"]/table/tbody/tr',
+	        ),
+	        HTMLFilter->new(
+	            search_xpath => '//td',
+	            result_type  => 'VALUE',
+	            ref_result   => 1,
+	        ),
+	        Node->new(
+	            process_into => 1,
+	            process_item => sub {
+	                shift; local $_ = shift; s/^\s*//; s/\s*$//;
+	                return $_;
+	            }
+	        ),
+	        DumperNode->new,
+	    ],
+	);
+
+	$chain->flush;
+
+Vamos examinar cada nó da cadeia:
+
+	LiteralData->new($base),
+	
+Esse nó simplesmente pega o valor de C<$base>, que é uma URL do site
+L<PortalTransparência|http://www.portaltransparencia.gov.br> e o injeta na
+fila de entrada do nó. Como ele não modifica o valor, essa mesma URL é o
+único item de saída desse nó.
+
+    MultiPageURLGenerator->new(
+        first_page => -1,
+        #last_page     => 35,
+        produce_last_page => sub {
+	        my $url = shift;
+			...
+        },
+        make_page_url => sub {
+	        my ( $self, $url, $page ) = @_;
+			...
+        },
+    ),
+
+A classe L<DataFlow::Node::MultiPageURLGenerator> serve para gerar, a partir
+de uma URL base, uma lista de URLs que correspondam às várias páginas nas
+quais aquele conjunto de dados se encontra. É obrigatório prover a C<sub>
+anônima C<make_page_url>. Esta C<sub> irá receber uma URL C<$url> e um número
+de página C<$page>, e deverá retornar uma outra URL para a página C<$page>
+do conjunto de dados.
+
+    NOP->new( deref => 1, ),
+    URLRetriever->new( process_into => 1, ),
+    HTMLFilter->new(
+        process_into => 1,
+        search_xpath =>
+          '//div[@id="listagemEmpresasSancionadas"]/table/tbody/tr',
+    ),
+    HTMLFilter->new(
+        search_xpath => '//td',
+        result_type  => 'VALUE',
+        ref_result   => 1,
+    ),
+    Node->new(
+        process_into => 1,
+        process_item => sub {
+            shift; local $_ = shift; s/^\s*//; s/\s*$//;
+            return $_;
+        }
+    ),
+    DumperNode->new,
+
+	$chain->flush;
 
 
 
@@ -177,11 +345,11 @@ para executar processamentos específicos:
 
 =over
 
-=item * Portal Transparência (L<http://www.portaltransparencia.gov.br/>)
+=item Portal Transparência (L<http://www.portaltransparencia.gov.br/>)
 
 =back
 
-=head2 Agradecimentos
+=head2 Agradecimento
 
 =over
 
@@ -189,6 +357,8 @@ para executar processamentos específicos:
 
 Pelos testes, pelas idéias e pelas dicussões em horários excusos. Muitas das
 idéias do L<DataFlow> germinaram a partir desses momentos.
+
+=back
 
 =head2 Autor
 
