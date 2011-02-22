@@ -53,8 +53,6 @@ tarefa de um I<Loader> seria gravar os dados em algum lugar. Os primeiros
 testes gravavam esses daods em um banco de dados MongoDB, ou imprimiam os
 dados obtidos usando o L<Data::Dumper> (para debug).
 
-=back
-
 =head3 Flow, Baby, Flow
 
 Quanto mais pensávamos no framework, mais ele se parecia com um fluxo de dados,
@@ -376,6 +374,9 @@ gostaríamos que eles ficassem agrupados - para isso passamos o parâmetro
 C<ref_result>, que irá transformar a lista de valores de cada linha em um
 I<ArrayRef> para essa lista.
 
+A saída deste nó é um I<array> de I<ArrayRef>s, cada um contendo os dados de
+cada pessoa listada nas últimas duas páginas do cadastro no site.
+
     Node->new(
         process_into => 1,
         process_item => sub {
@@ -383,11 +384,56 @@ I<ArrayRef> para essa lista.
             return $_;
         }
     ),
+
+Aqui criamos um nó do próprio tipo L<DataFlow::Node>, ao qual fornecemos o
+código C<process_item>, que irá, neste caso, remover eventuais espaços em
+branco no início e no final de cada dado, dentro de cada I<ArrayRef> - isso
+ocorre devido ao uso do parâmetro C<process_into>.
+
+A saída desse nó terá a mesma estrutura de dados do nó anterior, mas o conteúdo
+terá os espaços iniciais e finais removidos.
+
     DumperNode->new,
+
+Este nó, do tipo L<DataFlow::Node::Dumper>, utiliza o módulo L<Data::Dumper>
+para imprimir em C<STDERR> o conteúdo de cada item de dado. Neste caso ele
+listará, para cada pessoa inidônea ou sancionada das últimas duas páginas do
+cadastro, o conteúdo do I<ArrayRef> contendo os dados da pessoa.
+
+Para colocar a C<Chain> em ação, invocamos o método C<flush()>, que irá
+consumir itens da saída de um nó, no caso C<$chain>, até que não haja
+mais itens.
 
 	$chain->flush;
 
+=head2 Conclusão
 
+O L<DataFlow> ainda é um projeto novo, ainda há muito para se fazer. Existem
+várias idéias de melhorias, como por exemplo:
+
+=over
+
+=item Execução em paralelo (com threads e com fork)
+
+=item Nó para leitura/escrita de arquivos, I<encoding> de caracteres
+
+=item Nó para I<encoding> de caracteres
+
+=item Nó para envio/recebimento de mensagens em filas (RabbitMQ, MQ, etc...)
+
+=item Nó para geração de dados em formato RDF
+
+=item Nó para decodificar imagens com OCR
+
+=item Nó para executar comandos externos
+
+=item Uso de operadores (concatenação de nós seria uma cadeia)
+
+=item Construção de nós (e principalmente cadeias de nós) a partir de especificações em JSON e/ou YAML
+
+=item Nós que permitam I<split> e I<join> de fluxos de informação
+
+=back
 
 =head2 Referências
 
@@ -403,8 +449,8 @@ I<ArrayRef> para essa lista.
 
 =item Thiago "Maluco" Rondon - E<lt> thiago em aware ponto com ponto br E<gt>
 
-Pelos testes, pelas idéias e pelas dicussões em horários excusos. Muitas das
-idéias do L<DataFlow> germinaram a partir desses momentos.
+Pelos testes, idéias e discussões em horários excusos. Muitos dos conceitos
+do L<DataFlow> germinaram a partir desses momentos.
 
 =back
 
