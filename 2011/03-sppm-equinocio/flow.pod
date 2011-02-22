@@ -411,29 +411,25 @@ mais itens.
 O L<DataFlow> ainda é um projeto novo, ainda há muito para se fazer. Existem
 várias idéias de melhorias, como por exemplo:
 
-=over
+* Execução em paralelo (com threads e com fork)
 
-=item Execução em paralelo (com threads e com fork)
+* Nó para leitura/escrita de arquivos
 
-=item Nó para leitura/escrita de arquivos
+* Nó para I<encoding> de caracteres
 
-=item Nó para I<encoding> de caracteres
+* Nó para envio/recebimento de mensagens em filas (RabbitMQ, MQ, etc...)
 
-=item Nó para envio/recebimento de mensagens em filas (RabbitMQ, MQ, etc...)
+* Nó para geração de dados em formato RDF
 
-=item Nó para geração de dados em formato RDF
+* Nó para decodificar imagens com OCR
 
-=item Nó para decodificar imagens com OCR
+* Nó para executar comandos externos
 
-=item Nó para executar comandos externos
+* Uso de operadores (concatenação de nós seria uma cadeia)
 
-=item Uso de operadores (concatenação de nós seria uma cadeia)
+* Construção de nós (e principalmente cadeias de nós) a partir de especificações em JSON e/ou YAML
 
-=item Construção de nós (e principalmente cadeias de nós) a partir de especificações em JSON e/ou YAML
-
-=item Nós que permitam I<split> e I<join> de fluxos de informação
-
-=back
+* Nós que permitam I<split> e I<join> de fluxos de informação
 
 =head2 Referências
 
