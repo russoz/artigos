@@ -146,7 +146,7 @@ passado ao node.
 
 Um node sozinho não faz um hack, então é preciso "enfileirar" os nodes para
 conseguir obter um resultado significativo. Para isso temos a classe
-C<DataFlow::Node::Chain>, que pode ser usada assim:
+C<DataFlow::Chain>, que pode ser usada assim:
 
     my $uc = DataFlow::Node->new(
         process_item => sub { shift; return uc(shift) }
@@ -173,10 +173,8 @@ Algun exemplos de classes já disponíveis hoje:
 
 =item Chain
 
-Tipo especial de nó, que possui uma lista de nós, e concatena esses nós, de
-modo que os dados produzidos na saída de um nó são automaticamente injetados
-no próximo nó. Como um objeto da classe L<DataFlow::Chain> é também da classe
-L<DataFlow::Node>, ele também pode ser parte de uma outra cadeia de nós.
+Tipo especial de nó, que possui uma lista de nós, e concatena esses nós, como
+descrito acima.
 
 =item CSV
 
@@ -224,7 +222,10 @@ O L<DataFlow> surgiu do projeto L<OpenData-BR|http://www.opendatabr.org/>, e
 um dos usos para o qual ele foi pensado foi justamente a obtenção e manipulação
 de dados disponíveis em sites na web.
 
-Por exemplo, o script abaixo:
+Por exemplo, o script abaixo (baseado em
+L<df-portaltransparencia.pl|http://goo.gl/Vxw4f>), obtém as informações das
+pessoas (físicas e jurídicas) consideradas inidôneas e/ou que tenham sido
+sancionadas por algum órgão do governo:
 
 	my $base = join( '/',
 	    q{http://www.portaltransparencia.gov.br},
@@ -235,12 +236,8 @@ Por exemplo, o script abaixo:
 	        LiteralData->new($base),
 	        MultiPageURLGenerator->new(
 	            first_page => -1,
-	            #last_page     => 35,
 	            produce_last_page => sub {
 	                my $url = shift;
-	
-	                use DataFlow::Node::URLRetriever::Get;
-	                use HTML::TreeBuilder::XPath;
 	
 	                my $get  = DataFlow::Node::URLRetriever::Get->new;
 	                my $html = $get->get($url);
@@ -255,15 +252,13 @@ Por exemplo, o script abaixo:
 	            make_page_url => sub {
 	                my ( $self, $url, $page ) = @_;
 	
-	                use URI;
-	
 	                my $u = URI->new($url);
 	                $u->query_form( $u->query_form, Pagina => $page );
 	                return $u->as_string;
 	            },
 	        ),
 	        NOP->new( deref => 1, ),
-	        URLRetriever->new( process_into => 1, ),
+	        URLRetriever->new,
 	        HTMLFilter->new(
 	            process_into => 1,
 	            search_xpath =>
@@ -287,18 +282,17 @@ Por exemplo, o script abaixo:
 
 	$chain->flush;
 
-Vamos examinar cada nó da cadeia:
+Vamos examinar cada nó da cadeia.
 
 	LiteralData->new($base),
 	
 Esse nó simplesmente pega o valor de C<$base>, que é uma URL do site
 L<PortalTransparência|http://www.portaltransparencia.gov.br> e o injeta na
-fila de entrada do nó. Como ele não modifica o valor, essa mesma URL é o
+fila de entrada do nó. Como ele não modifica o valor, essa mesma URL será o
 único item de saída desse nó.
 
     MultiPageURLGenerator->new(
-        first_page => -1,
-        #last_page     => 35,
+        first_page => -2,
         produce_last_page => sub {
 	        my $url = shift;
 			...
@@ -316,18 +310,72 @@ anônima C<make_page_url>. Esta C<sub> irá receber uma URL C<$url> e um número
 de página C<$page>, e deverá retornar uma outra URL para a página C<$page>
 do conjunto de dados.
 
+As páginas inicial e final podem ser indicadas explicitamente, passando os
+parâmetros C<first_page> e C<last_page>, respectivamente. Caso C<first_page>
+não seja passado, será usado 1 (um) como valor I<default>. Se C<last_page>
+não for passado, o parâmetro C<produce_last_page> B<deverá> conter uma C<sub>
+anônima que irá calcular o número da última página, baseado na C<$url> base.
+
+No exemplo acima, a última página é obtida no próprio site, e a primeira
+página está como C<-2>, o que significa que irá começar na penúltima página.
+
+A saída desse nó será um I<ArrayRef> que aponta para um I<array> que contém as
+URLs das últimas duas páginas.
+
     NOP->new( deref => 1, ),
-    URLRetriever->new( process_into => 1, ),
+
+Esse nó, do tipo L<DataFlow::NOP> não irá transformar a informação em si, mas
+como passamos o valor C<1> para o parâmetro C<deref>, o I<ArrayRef> recebido
+será dereferenciado, isto é, transformado de volta em um I<array>, e injetado
+na fila de saída do nó. Assim, cada elemento do I<array> será tratado como um
+dado independente pelos próximos nós. Poderíamos ter passado C<deref> no nó
+anterior, mas deixamos aqui para efeito de ilustração.
+
+A saída desse nó serão duas I<strings> contendo as URLs, respectivamente, da
+penúltima e última páginas do cadastro do site.
+
+    URLRetriever->new,
+
+Este nó acima, como o nome da classe L<DataFlow::URLRetriever> indica, irá
+acessar as URLs passadas e buscará o conteúdo (no caso, código HTML).
+
+A saída desse nó serão duas strings, cada uma delas correspondendo ao conteúdo
+HTML completo das URLs das últimas duas páginas.
+
     HTMLFilter->new(
-        process_into => 1,
         search_xpath =>
           '//div[@id="listagemEmpresasSancionadas"]/table/tbody/tr',
     ),
+
+A classe L<DataFlow::HTMLFilter> é, obviamente, utilizada para filtrar conteúdo
+HTML. Essa filtragem é baseada em XPath. No caso do exemplo acima, o filtro
+irá buscar uma tag com atributo,
+C<< <div id="listagemEmpresasSancionadas"> >>, e dentro do bloco delimitado
+por essa tag, uma C<< <table> >>, dentro dela um C<< <tbody> >>, e dentro dele
+todas as tags C<< <tr> >>, que naturalmente correspondem às linhas da tabela
+com os dados que buscamos.
+
+Por I<default>, será retornado o texto HTML resultante da busca. No caso, a
+saída deste nó será um I<array> de I<strings>, cada uma contendo integralmente
+o texto HTML de cada linha (C<< <tr> >>) encontrada nas tabelas de ambas as
+duas páginas, isto é, uma única seqüência de itens.
+
     HTMLFilter->new(
         search_xpath => '//td',
         result_type  => 'VALUE',
         ref_result   => 1,
     ),
+
+Mais um filtro HTML, desta vez para obter, de cada linha da tabela os valores
+de cada célula, ou seja, de cada tag C<< <td> >> que a linha (C<< <tr> >>)
+contiver. No entanto, aqui passamos o parâmetro C<result_type> igual a
+C<'VALUE'>, isso faz com que, por exemplo,
+C<< <tr><td>1</td><td>aa</td></tr> >>, retorne C<< ( 1, 'aa' ) >>. Mas, como
+cada item de uma linha são atributos de um único item (pessoa inidônea),
+gostaríamos que eles ficassem agrupados - para isso passamos o parâmetro
+C<ref_result>, que irá transformar a lista de valores de cada linha em um
+I<ArrayRef> para essa lista.
+
     Node->new(
         process_into => 1,
         process_item => sub {
