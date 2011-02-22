@@ -415,7 +415,7 @@ várias idéias de melhorias, como por exemplo:
 
 =item Execução em paralelo (com threads e com fork)
 
-=item Nó para leitura/escrita de arquivos, I<encoding> de caracteres
+=item Nó para leitura/escrita de arquivos
 
 =item Nó para I<encoding> de caracteres
 
