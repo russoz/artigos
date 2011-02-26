@@ -65,7 +65,7 @@ Em meados de Dezembro de 2010, a primeira idéia foi codificada em termos de
 =begin pod:xhtml
 
 <center>
-<img style="border-width:0" src="fig1-porco-salsicha.png" />
+<img style="border-width:0" src="https://github.com/russoz/artigos/raw/master/2011/03-sppm-equinocio/fig1-porco-salsicha.png" />
 </center>
 
 =end pod:xhtml
