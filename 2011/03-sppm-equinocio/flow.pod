@@ -6,11 +6,12 @@
 
 Tudo começou com um e-mail na L<lista da SP-PM|http://sao-paulo.pm.org/lista>,
 no qual se falou de "hackear" dados públicos. 
-Isso virou uma idéia de produzir um framework para buscar e 
+Logo isso evoluiu para a idéia de produzir um framework para buscar e 
 analisar dados públicos. 
-Logo, o L<Thiago Rondon|http://www.maluco.com.br/blog/> montou um 
+Sem demora, o L<Thiago Rondon|http://www.maluco.com.br/blog/> montou um 
 L<repositório no GitHub|https://github.com/maluco/OpenData-BR> e começou a 
-rabiscar umas idéias de código.  O L<OpenData-BR|http://www.opendatabr.org/>
+rabiscar umas idéias de código, e logo em seguida o site do
+L<OpenData-BR|http://www.opendatabr.org/>. O projeto
 ainda tem um status de I<work in progress>, mas as expectativas e as
 perspectivas são muito animadoras.
  
@@ -26,7 +27,7 @@ L<PortalTransparencia|http://www.portaltransparencia.gov.br/>, o site do
 governo federal para promover a transparência nos dados do governo.
 
 Seguindo a metodologia opensource I<"release early, release often">, o
-projeto começou a disponibilizar código que - efetivamente - conseguia buscar
+projeto começou a disponibilizar código que, efetivamente, conseguia buscar
 dados. No entanto, esse código inicialmente não fazia muitas provisões
 para manutenção e extensão no futuro.
 
@@ -35,23 +36,18 @@ para manutenção e extensão no futuro.
 Surgiu então uma tentativa de modularizar melhor o B<OpenData-BR>, dividindo-o
 em 3 tipos de componentes:
 
-=head4 Extractors
+B<Extractors>: Extratores de dados. A idéia seria que todos os scrapers,
+sejam web ou não, na forma que forem, seriam um tipo de Extractor.
 
-Extratores de dados. Basicamente a idéia seria que todos os scrapers, sejam
-web ou não, na forma que forem, seriam um tipo de Extractor.
-
-=head4 Transformers
-
-Robôs assassinos que se transformam em carros ou outras máquinas fantásticas.
-OK, não precisavam rir mesmo. Componentes que iriam conter toda a lógica de
+B<Transformers>: Robôs assassinos que se transformam em carros ou outras
+máquinas fantásticas.
+Ou componentes que iriam conter toda a lógica de
 B<transformação> dos dados, dos documentos originais para os dados buscados.
 
-=head4 Loaders
-
-Seriam os I<end-points> do processo de extração dos dados, e a principal
-tarefa de um I<Loader> seria gravar os dados em algum lugar. Os primeiros
-testes gravavam esses daods em um banco de dados MongoDB, ou imprimiam os
-dados obtidos usando o L<Data::Dumper> (para debug).
+B<Loaders>: Seriam os I<end-points> do processo de extração dos dados, e a
+principal tarefa de um I<Loader> seria gravar os dados em algum lugar.
+Os primeiros testes gravavam esses dados em um banco de dados MongoDB, ou
+imprimiam os dados obtidos usando o L<Data::Dumper> (para debug).
 
 =head3 Flow, Baby, Flow
 
@@ -66,7 +62,18 @@ Em meados de Dezembro de 2010, a primeira idéia foi codificada em termos de
 "caixas", que teriam um entrada e uma saída - de uma forma bem genérica: 
 "entra porquinho, sai salsicha".
 
-=for picture: porquinho -> caixa -> salsicha
+=begin pod:xhtml
+
+<center>
+<img style="border-width:0" src="fig1-porco-salsicha.png" />
+</center>
+
+=end pod:xhtml
+
+Em termos de programação em C<Perl>, podemos colocar vários tipos de
+porquinhos:
+
+=for picture: tipos perl -> caixa -> tipos saída
 
 E as caixas poderiam ser enfileiradas para que a salsicha de um pudesse virar
 a feijoada do próximo.
@@ -77,13 +84,7 @@ escrevo este artigo, tornou-se um projeto independente, o I<"DataFlow">.
 
 =head2 Show Me The Node
 
-B<DISCLAIMER>: O L<DataFlow> é um projeto que está em um estágio muito novo
-do seu desenvolvimento, e por enquanto não há promessas ou garantias de que
-as interfaces serão mantidas. Se há interesse em usar o DataFlow, sugiro
-acompanhar de perto o desenvolvimento do mesmo para ficar a par de quaisquer
-mudanças.
-
-Um exemplo básico de um node que transforma os dados para caixa-alta (
+Um exemplo básico de um nó que transforma os dados para caixa-alta (
 I<upper-case>), usando a função C<< uc() >> padrão do Perl.
 
     my $uc = DataFlow::Node->new(
@@ -92,9 +93,7 @@ I<upper-case>), usando a função C<< uc() >> padrão do Perl.
         }
     );
 
-Isso é um I<node> que irá transformar os itens fornecidos para caixa-alta. As
-próximas perguntas são: Como eu uso? O que eu posso passar para esse node? As
-respostas são:
+E como usar esse nó? Um nó pode ser usado de mais de um jeito:
 
     # em duas etapas
     $uc->input( 'laranja' );
@@ -122,10 +121,10 @@ referência, use:
         }
     );
 
-    my $out = $uc->process( [ qw/oh my god/ ] );
+    my $out = $uc->process( [ 'oh', 'my', 'god' ] );
     # resultado: [ 'OH', 'MY', 'GOD' ]
 
-    my $ou = $uc->process( { a => 'value', another => 'different value' } );
+    my $out = $uc->process( { a => 'value', another => 'different value' } );
     # resultado { a => 'VALUE', another => 'DIFFERENT VALUE' } );
     
 Também podemos passar I<code references> para serem processadas (usando o
@@ -200,7 +199,7 @@ web de um conjunto de dados.
 
 =item NOP
 
-Nó "NO-OP". A informção sai do mesmo jeito que entrou. Pode ser utilizado como
+Nó "NO-OP". A informação sai do mesmo jeito que entrou. Pode ser utilizado como
 classe base para outras classes, ou apenas para alterar algum atributo do fluxo
 de dados.
 
@@ -282,7 +281,7 @@ sancionadas por algum órgão do governo:
 
 Vamos examinar cada nó da cadeia.
 
-	LiteralData->new($base),
+    LiteralData->new($base),
 	
 Esse nó simplesmente pega o valor de C<$base>, que é uma URL do site
 L<PortalTransparência|http://www.portaltransparencia.gov.br> e o injeta na
@@ -404,18 +403,25 @@ Para colocar a C<Chain> em ação, invocamos o método C<flush()>, que irá
 consumir itens da saída de um nó, no caso C<$chain>, até que não haja
 mais itens.
 
-	$chain->flush;
+    $chain->flush;
 
 =head2 Conclusão
 
-O L<DataFlow> ainda é um projeto novo, ainda há muito para se fazer. Existem
-várias idéias de melhorias, como por exemplo:
+O L<DataFlow> é um projeto que está em um estágio muito novo do seu
+desenvolvimento, e por enquanto não há promessas ou garantias de que
+as interfaces serão mantidas. Se houver interesse em usar o DataFlow, sugiro
+acompanhar de perto o desenvolvimento do mesmo para ficar a par de quaisquer
+mudanças.
 
-=item * Execução em paralelo (com threads e com fork)
+Já existem várias idéias de melhorias, como por exemplo:
 
-=item * Nó para leitura/escrita de arquivos
+=over
 
-=item * Nó para I<encoding> de caracteres
+=item * Execução em paralelo (com threads, com forks)
+
+=item * Nó para leitura/escrita de arquivos (em andamento)
+
+=item * Nó para I<encoding> de caracteres (em andamento)
 
 =item * Nó para envio/recebimento de mensagens em filas (RabbitMQ, MQ, etc...)
 
@@ -424,6 +430,7 @@ várias idéias de melhorias, como por exemplo:
 =item * Nó para decodificar imagens com OCR
 
 =item * Nó para executar comandos externos
+(enviar ou receber dados para esses comandos)
 
 =item * Uso de operadores (concatenação de nós seria uma cadeia)
 
@@ -431,11 +438,23 @@ várias idéias de melhorias, como por exemplo:
 
 =item * Nós que permitam I<split> e I<join> de fluxos de informação
 
+=back
+
+Estas e outras idéias de melhorias estão no arquivo de
+L<TODO|https://github.com/russoz/DataFlow/blob/master/TODO> no repositório
+do projeto.
+
 =head2 Referências
 
 =over
 
-=item Portal Transparência (L<http://www.portaltransparencia.gov.br/>)
+=item Portal Transparência
+
+L<http://www.portaltransparencia.gov.br/>
+
+=item OpenData-BR
+
+L<http://www.opendatabr.org/>
 
 =back
 
@@ -443,7 +462,7 @@ várias idéias de melhorias, como por exemplo:
 
 =over
 
-=item Thiago "Maluco" Rondon - E<lt> thiago em aware ponto com ponto br E<gt>
+=item Thiago "Maluco" Rondon E<lt> thiago em aware ponto com ponto br E<gt>
 
 Pelos testes, idéias e discussões em horários excusos. Muitos dos conceitos
 do L<DataFlow> germinaram a partir desses momentos.
