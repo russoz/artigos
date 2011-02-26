@@ -1,6 +1,6 @@
 =encoding utf8
 
-=head1 OpenData::Flow - um Framework Para Fluxo de Dados
+=head1 DataFlow - um Framework Para Fluxo de Dados
 
 =head2 OpenData
 
@@ -82,7 +82,7 @@ a feijoada do próximo.
 
 Assim surgiu, dentro do repositório do B<OpenData>, o sub-projeto que foi,
 inicialmente, denominado de I<"Box">. Depois se tornou o I<"Flow"> e, enquanto
-escrevo este artigo, tornou-se um projeto independente, o I<"DataFlow">.
+este artigo é escrito, tornou-se um projeto independente, o I<"DataFlow">.
 
 =head2 Show Me The Node
 
@@ -110,7 +110,7 @@ E como usar esse nó? Um nó pode ser usado de mais de um jeito:
     # podemos passar referencias
     my $out = $uc->process( [ 'oh', 'my', 'god' ] );
 
-B<PEGADINHA>: nesta última forma, os elementos do ArrayRef C<não> serão
+B<Atenção>: nesta última forma, os elementos do ArrayRef C<não> serão
 transformados, pois você pode ter um node que espera de fato uma I<reference>
 e a trata de acordo com suas próprias regras. O mesmo se aplica a outros tipos
 de referência. Se você quer que o node processe a informação B<dentro> da
@@ -141,11 +141,14 @@ do mesmo tipo. Neste último caso C<$out> contém um I<code reference> que,
 ao ser invocado, aplica a função C<uc()> ao resultado do I<code reference>
 passado ao node.
 
+B<Futuro>: Talvez o parâmetro C<process_into> passe a ser habilitado por
+I<default>. Isso está sendo considerado.
+
 =head3 Chains
 
 Um node sozinho não faz um hack, então é preciso "enfileirar" os nodes para
 conseguir obter um resultado significativo. Para isso temos a classe
-C<DataFlow::Chain>, que pode ser usada assim:
+L<DataFlow::Chain>, que pode ser usada assim:
 
     my $uc = DataFlow::Node->new(
         process_item => sub { shift; return uc(shift) }
@@ -153,7 +156,7 @@ C<DataFlow::Chain>, que pode ser usada assim:
     my $rv = DataFlow::Node->new(
         process_item => sub { shift; return scalar reverse $_[0]; }
     );
-    my $chain = DataFlow::Node::Chain->new( links => [ $uc, $rv ] );
+    my $chain = DataFlow::Chain->new( links => [ $uc, $rv ] );
 
 Um objeto da classe C<Chain> é também um C<Node>, e funciona da mesma forma:
 
@@ -166,50 +169,50 @@ Um objeto da classe C<Chain> é também um C<Node>, e funciona da mesma forma:
 Algumas operações são mais comuns, e nodes especializados podem ser criados
 para executar processamentos específicos. O pacote L<DataFlow>, contém ainda
 apenas um pequeno número dessas classes, mas com o tempo isso deve aumentar.
-Algun exemplos de classes já disponíveis hoje:
+Alguns exemplos de classes já disponíveis hoje são:
 
 =over
 
-=item Chain
+=item L<DataFlow::Chain>
 
 Tipo especial de nó, que possui uma lista de nós, e concatena esses nós, como
 descrito acima.
 
-=item CSV
+=item L<DataFlow::Node::CSV>
 
 Nó que transforma array references em strings no formato CSV.
 
-=item Dumper
+=item L<DataFlow::Node::Dumper>
 
 Nó que utiliza o módulo L<Data::Dumper> para imprimir a estrutura de cada item
 para STDERR.
 
-=item HTMLFilter
+=item L<DataFlow::Node::HTMLFilter>
 
 Nó utilizado para filtrar tags de um documento HTML utilizando
 L<HTML::TreeBuilder::XPath>. Pode produzir nodes (L<HTML::Element>), HTML ou
 somente os valores de tags e/ou atributos.
 
-=item LiteralData
+=item L<DataFlow::Node::LiteralData>
 
 Nó que injeta na sua fila de entrada os parâmetros passados ao construtor.
 
-=item MultiPageURLGenerator
+=item L<DataFlow::Node::MultiPageURLGenerator>
 
 Nó utilizado para gerar uma lista de URLs com os endereços de todas as páginas
 web de um conjunto de dados.
 
-=item NOP
+=item L<DataFlow::Node::NOP>
 
 Nó "NO-OP". A informação sai do mesmo jeito que entrou. Pode ser utilizado como
 classe base para outras classes, ou apenas para alterar algum atributo do fluxo
 de dados.
 
-=item Null
+=item L<DataFlow::Node::Null>
 
 Nó que sempre retorna C<undef>.
 
-=item URLRetriever
+=item L<DataFlow::Node::URLRetriever>
 
 Nó que recebe URLs na entrada, e retorna o conteúdo das mesmas na saída.
 
@@ -226,13 +229,9 @@ L<df-portaltransparencia.pl|http://goo.gl/Vxw4f>), obtém as informações das
 pessoas (físicas e jurídicas) consideradas inidôneas e/ou que tenham sido
 sancionadas por algum órgão do governo:
 
-	my $base = join( '/',
-	    q{http://www.portaltransparencia.gov.br},
-	    q{ceis}, q{EmpresasSancionadas.asp?paramEmpresa=0} );
-
 	my $chain = Chain->new(
 	    links => [
-	        LiteralData->new($base),
+	        LiteralData->new($base_url),
 	        MultiPageURLGenerator->new(
 	            first_page => -1,
 	            produce_last_page => sub {
@@ -285,10 +284,11 @@ Vamos examinar cada nó da cadeia.
 
     LiteralData->new($base),
 	
-Esse nó simplesmente pega o valor de C<$base>, que é uma URL do site
-L<PortalTransparência|http://www.portaltransparencia.gov.br> e o injeta na
-fila de entrada do nó. Como ele não modifica o valor, essa mesma URL será o
-único item de saída desse nó.
+Esse nó simplesmente pega o valor de C<$base_url>, uma URL (no caso vamos
+presumir que seja a URL do B<Cadastro de Empresas Inidôneas ou Sancionadas>
+do site L<PortalTransparência|http://www.portaltransparencia.gov.br>) e a
+injeta na fila de entrada do nó. Como L<DataFlow::Node::LiteralData> não
+modifica o valor, essa mesma URL será o único item de saída desse nó.
 
     MultiPageURLGenerator->new(
         first_page => -2,
@@ -464,6 +464,7 @@ L<http://www.opendatabr.org/>
 
 B<< Thiago "Maluco" Rondon E<lt> thiago em aware ponto com ponto br E<gt> >>
 
+Por tirar o OpenData-BR do plano das idéias e trazê-lo para a realidade.
 Pelos testes, idéias e discussões, muitas vezes em horários excusos.
 Muitos dos conceitos do L<DataFlow> germinaram a partir desses momentos.
 
