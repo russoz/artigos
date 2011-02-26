@@ -462,18 +462,16 @@ L<http://www.opendatabr.org/>
 
 =head2 Agradecimento
 
-=over
+B<< Thiago "Maluco" Rondon E<lt> thiago em aware ponto com ponto br E<gt> >>
 
-=item Thiago "Maluco" Rondon E<lt> thiago em aware ponto com ponto br E<gt>
-
-Pelos testes, idéias e discussões em horários excusos. Muitos dos conceitos
-do L<DataFlow> germinaram a partir desses momentos.
+Pelos testes, idéias e discussões, muitas vezes em horários excusos.
+Muitos dos conceitos do L<DataFlow> germinaram a partir desses momentos.
 
 =back
 
 =head2 Autor
 
-Alexei "Russo" Znamensky - E<lt> russoz no cpan org E<gt>
+B<< Alexei "Russo" Znamensky E<lt> russoz no cpan org E<gt> >>
 
 Blog: L<http://russoz.wordpress.com/>
 
