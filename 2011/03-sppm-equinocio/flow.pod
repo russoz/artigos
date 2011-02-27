@@ -2,7 +2,7 @@
 
 =head1 DataFlow - um Framework Para Fluxo de Dados
 
-=head2 OpenData
+=head2 OpenData - O Começo e o Fim
 
 Tudo começou com um e-mail na L<lista da SP-PM|http://sao-paulo.pm.org/lista>,
 no qual se falou de "hackear" dados públicos. 
@@ -13,7 +13,9 @@ L<repositório no GitHub|https://github.com/maluco/OpenData-BR> e começou a
 rabiscar umas idéias de código, e logo em seguida o site do
 L<OpenData-BR|http://www.opendatabr.org/>. O projeto
 ainda tem um status de I<work in progress>, mas as expectativas e as
-perspectivas são muito animadoras.
+perspectivas são muito animadoras, e espera-se que em breve o B<DataFlow>
+possa ser utilizado amplamente pelo B<OpenData-BR> para disponibilizar os
+dados públicos.
  
 =head2 Primeiras Idéias
 
@@ -31,7 +33,7 @@ projeto começou a disponibilizar código que, efetivamente, conseguia buscar
 dados. No entanto, esse código inicialmente não fazia muitas provisões
 para manutenção e extensão no futuro.
 
-=head3 ETL - extract transform load
+=head3 ETL - Extract, Transform, Load
 
 Surgiu então uma tentativa de modularizar melhor o B<OpenData-BR>, dividindo-o
 em 3 tipos de componentes:
@@ -41,7 +43,7 @@ sejam web ou não, na forma que forem, seriam um tipo de Extractor.
 
 B<Transformers>: Robôs assassinos que se transformam em carros ou outras
 máquinas fantásticas.
-Ou componentes que iriam conter toda a lógica de
+Ou, componentes que iriam conter toda a lógica de
 B<transformação> dos dados, dos documentos originais para os dados buscados.
 
 B<Loaders>: Seriam os I<end-points> do processo de extração dos dados, e a
@@ -146,7 +148,7 @@ I<default>. Isso está sendo considerado.
 
 =head3 Chains
 
-Um node sozinho não faz um hack, então é preciso "enfileirar" os nodes para
+Um I<node> sozinho não faz um I<hack>, então é preciso "enfileirar" os nós para
 conseguir obter um resultado significativo. Para isso temos a classe
 L<DataFlow::Chain>, que pode ser usada assim:
 
@@ -166,7 +168,7 @@ Um objeto da classe C<Chain> é também um C<Node>, e funciona da mesma forma:
 
 =head3 Biblioteca de Nós
 
-Algumas operações são mais comuns, e nodes especializados podem ser criados
+Algumas operações são mais comuns, e nós especializados podem ser criados
 para executar processamentos específicos. O pacote L<DataFlow>, contém ainda
 apenas um pequeno número dessas classes, mas com o tempo isso deve aumentar.
 Alguns exemplos de classes já disponíveis hoje são:
