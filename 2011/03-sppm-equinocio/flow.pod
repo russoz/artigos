@@ -70,7 +70,7 @@ Em meados de Dezembro de 2010, a primeira idéia foi codificada em termos de
 
 =end pod:xhtml
 
-Em termos de programação em C<Perl>, podemos colocar vários tipos de
+Em termos de programação em B<Perl>, podemos colocar vários tipos de
 porquinhos:
 
 =begin pod:xhtml
@@ -112,7 +112,7 @@ E como usar esse nó? Um nó pode ser usado de mais de um jeito:
     # podemos passar referencias
     my $out = $uc->process( [ 'oh', 'my', 'god' ] );
 
-B<Atenção>: nesta última forma, os elementos do ArrayRef C<não> serão
+B<Atenção>: nesta última forma, os elementos do ArrayRef B<não> serão
 transformados, pois você pode ter um node que espera de fato uma I<reference>
 e a trata de acordo com suas próprias regras. O mesmo se aplica a outros tipos
 de referência. Se você quer que o node processe a informação B<dentro> da
@@ -160,7 +160,7 @@ L<DataFlow::Chain>, que pode ser usada assim:
     );
     my $chain = DataFlow::Chain->new( links => [ $uc, $rv ] );
 
-Um objeto da classe C<Chain> é também um C<Node>, e funciona da mesma forma:
+Um objeto da classe B<Chain> é também um B<Node>, e funciona da mesma forma:
 
 	$chain->input( qw/abc def ghi/ );
 	my @result = $chain->output();
@@ -226,7 +226,9 @@ O L<DataFlow> surgiu do projeto L<OpenData-BR|http://www.opendatabr.org/>, e
 um dos usos para o qual ele foi pensado foi justamente a obtenção e manipulação
 de dados disponíveis em sites na web.
 
-Por exemplo, o script abaixo (baseado em
+=head3 DATAFLOW EM AÇÃO
+
+Por exemplo, o trecho de script abaixo (baseado em
 L<df-portaltransparencia.pl|http://goo.gl/Vxw4f>), obtém as informações das
 pessoas (físicas e jurídicas) consideradas inidôneas e/ou que tenham sido
 sancionadas por algum órgão do governo:
@@ -276,21 +278,62 @@ sancionadas por algum órgão do governo:
 	                return $_;
 	            }
 	        ),
-	        DumperNode->new,
+	        DataFlow::Node::Dumper->new,
 	    ],
 	);
 
 	$chain->flush;
 
+=head3 RESULTADO
+
+Esse código irá imprimir na tela (C<STDERR>) algo como:
+
+	...
+
+	$VAR1 = [
+	          '11.222.333/0001-44',
+	          'A CALOTEIRA LTDA.',
+	          'Suspensa',
+	          '04/06/08',
+	          '03/06/13',
+	          'SENADO FEDERAL',
+	          '**',
+	          'SENADO FEDERAL',
+	          '14/04/2009'
+	        ];
+	$VAR1 = [
+	          '555.666.777-88',
+	          'JOSÉ DO TRAMBIQUE',
+	          'Inid�nea',
+	          '27/10/09',
+	          '27/10/14',
+	          '1� VARA CIVEL - S�O SEBASTIAO DO PARA�SO - TJMG',
+	          '',
+	          'CONSELHO NACIONAL DE JUSTI�A',
+	          '02/01/2011'
+	        ];
+
+Como pode ser visto, a parte de codificação de caracteres ainda precisa de
+algum trabalho. Mas os dados já foram obtidos e "limpos", faltando apenas
+convertê-los para algum formato que possa ser facilmente manipulável por
+outros sistemas.
+
+Já estão sendo trabalhados nós para conversão de codificação de caracteres,
+bem como para a transformação para outros formatos, como CSV e XML.
+
+=head3 Passo-a-Passo
+
 Vamos examinar cada nó da cadeia.
 
     LiteralData->new($base),
 	
-Esse nó simplesmente pega o valor de C<$base_url>, uma URL (no caso vamos
-presumir que seja a URL do B<Cadastro de Empresas Inidôneas ou Sancionadas>
+Esse nó simplesmente pega o valor de C<$base_url>, uma URL (para este exemplo
+estamos considerando que é a URL do
+B<Cadastro de Empresas Inidôneas ou Sancionadas>
 do site L<PortalTransparência|http://www.portaltransparencia.gov.br>) e a
-injeta na fila de entrada do nó. Como L<DataFlow::Node::LiteralData> não
-modifica o valor, essa mesma URL será o único item de saída desse nó.
+injeta na fila de entrada do nó. O objeto do tipo
+L<DataFlow::Node::LiteralData> não modifica o valor,
+logo essa URL será o único item de saída desse nó.
 
     MultiPageURLGenerator->new(
         first_page => -2,
@@ -306,19 +349,19 @@ modifica o valor, essa mesma URL será o único item de saída desse nó.
 
 A classe L<DataFlow::Node::MultiPageURLGenerator> serve para gerar, a partir
 de uma URL base, uma lista de URLs que correspondam às várias páginas nas
-quais aquele conjunto de dados se encontra. É obrigatório prover a C<sub>
-anônima C<make_page_url>. Esta C<sub> irá receber uma URL C<$url> e um número
+quais aquele conjunto de dados se encontra. É obrigatório prover a I<sub>
+anônima C<make_page_url>. Esta I<sub> irá receber uma URL C<$url> e um número
 de página C<$page>, e deverá retornar uma outra URL para a página C<$page>
 do conjunto de dados.
 
 As páginas inicial e final podem ser indicadas explicitamente, passando os
 parâmetros C<first_page> e C<last_page>, respectivamente. Caso C<first_page>
 não seja passado, será usado 1 (um) como valor I<default>. Se C<last_page>
-não for passado, o parâmetro C<produce_last_page> B<deverá> conter uma C<sub>
+não for passado, o parâmetro C<produce_last_page> B<deverá> conter uma I<sub>
 anônima que irá calcular o número da última página, baseado na C<$url> base.
 
 No exemplo acima, a última página é obtida no próprio site, e a primeira
-página está como C<-2>, o que significa que irá começar na penúltima página.
+página está como B<-2>, o que significa que irá começar na penúltima página.
 
 A saída desse nó será um I<ArrayRef> que aponta para um I<array> que contém as
 URLs das últimas duas páginas.
@@ -326,7 +369,7 @@ URLs das últimas duas páginas.
     NOP->new( deref => 1, ),
 
 Esse nó, do tipo L<DataFlow::NOP> não irá transformar a informação em si, mas
-como passamos o valor C<1> para o parâmetro C<deref>, o I<ArrayRef> recebido
+como passamos o valor B<1> para o parâmetro C<deref>, o I<ArrayRef> recebido
 será dereferenciado, isto é, transformado de volta em um I<array>, e injetado
 na fila de saída do nó. Assim, cada elemento do I<array> será tratado como um
 dado independente pelos próximos nós. Poderíamos ter passado C<deref> no nó
@@ -351,14 +394,14 @@ HTML completo das URLs das últimas duas páginas.
 A classe L<DataFlow::HTMLFilter> é, obviamente, utilizada para filtrar conteúdo
 HTML. Essa filtragem é baseada em XPath. No caso do exemplo acima, o filtro
 irá buscar uma tag com atributo,
-C<< <div id="listagemEmpresasSancionadas"> >>, e dentro do bloco delimitado
-por essa tag, uma C<< <table> >>, dentro dela um C<< <tbody> >>, e dentro dele
-todas as tags C<< <tr> >>, que naturalmente correspondem às linhas da tabela
+B<< <div id="listagemEmpresasSancionadas"> >>, e dentro do bloco delimitado
+por essa tag, uma B<< <table> >>, dentro dela um B<< <tbody> >>, e dentro dele
+todas as tags B<< <tr> >>, que naturalmente correspondem às linhas da tabela
 com os dados que buscamos.
 
 Por I<default>, será retornado o texto HTML resultante da busca. No caso, a
 saída deste nó será um I<array> de I<strings>, cada uma contendo integralmente
-o texto HTML de cada linha (C<< <tr> >>) encontrada nas tabelas de ambas as
+o texto HTML de cada linha (B<< <tr> >>) encontrada nas tabelas de ambas as
 duas páginas, isto é, uma única seqüência de itens.
 
     HTMLFilter->new(
@@ -368,10 +411,10 @@ duas páginas, isto é, uma única seqüência de itens.
     ),
 
 Mais um filtro HTML, desta vez para obter, de cada linha da tabela os valores
-de cada célula, ou seja, de cada tag C<< <td> >> que a linha (C<< <tr> >>)
+de cada célula, ou seja, de cada tag B<< <td> >> que a linha (B<< <tr> >>)
 contiver. No entanto, aqui passamos o parâmetro C<result_type> igual a
 C<'VALUE'>, isso faz com que, por exemplo,
-C<< <tr><td>1</td><td>aa</td></tr> >>, retorne C<< ( 1, 'aa' ) >>. Mas, como
+B<< <tr><td>1</td><td>aa</td></tr> >>, retorne B<< ( 1, 'aa' ) >>. Mas, como
 cada item de uma linha são atributos de um único item (pessoa inidônea),
 gostaríamos que eles ficassem agrupados - para isso passamos o parâmetro
 C<ref_result>, que irá transformar a lista de valores de cada linha em um
@@ -396,14 +439,14 @@ ocorre devido ao uso do parâmetro C<process_into>.
 A saída desse nó terá a mesma estrutura de dados do nó anterior, mas o conteúdo
 terá os espaços iniciais e finais removidos.
 
-    DumperNode->new,
+	DataFlow::Node::Dumper->new,
 
 Este nó, do tipo L<DataFlow::Node::Dumper>, utiliza o módulo L<Data::Dumper>
 para imprimir em C<STDERR> o conteúdo de cada item de dado. Neste caso ele
 listará, para cada pessoa inidônea ou sancionada das últimas duas páginas do
 cadastro, o conteúdo do I<ArrayRef> contendo os dados da pessoa.
 
-Para colocar a C<Chain> em ação, invocamos o método C<flush()>, que irá
+Para colocar a B<Chain> em ação, invocamos o método C<flush()>, que irá
 consumir itens da saída de um nó, no caso C<$chain>, até que não haja
 mais itens.
 
@@ -448,6 +491,11 @@ Estas e outras idéias de melhorias estão no arquivo de
 L<TODO|https://github.com/russoz/DataFlow/blob/master/TODO> no repositório
 do projeto.
 
+B<Você pode ajudar!> De várias formas: escrevendo código, tanto para os módulos 
+quanto testes. Executando testes e enviando I<reports> - neste momento há, por
+exemplo, alguns reports de erro em FreeBSD que não estão ocorrendo no sistema
+dos mantenedores (Linux).
+
 =head2 Referências
 
 =over
@@ -455,6 +503,10 @@ do projeto.
 =item Portal Transparência
 
 L<http://www.portaltransparencia.gov.br/>
+
+=item Portal Transparência - CEIS (Cadastro de Empresas Inidôneas ou Sancionadas)
+
+L<http://goo.gl/UDNaG>
 
 =item OpenData-BR
 
