@@ -97,6 +97,16 @@ I<upper-case>), usando a função C<< uc() >> padrão do Perl.
         }
     );
 
+O racional de um C<Node> é o mesmo de um comando de Unix ou Linux que atua
+como um filtro: ele é um pedaço de cano (I<pipe>), que faz uma coisa só,
+simples, e bem definida:
+
+=begin pod:xhtml
+
+<center><img style="border-width:0" src="https://github.com/russoz/artigos/raw/master/2011/03-sppm-equinocio/fig3-node.png" /></center>
+
+=end pod:xhtml
+
 E como usar esse nó? Um nó pode ser usado de mais de um jeito:
 
     # em duas etapas
@@ -149,8 +159,17 @@ I<default>. Isso está sendo considerado.
 =head3 Chains
 
 Um I<node> sozinho não faz um I<hack>, então é preciso "enfileirar" os nós para
-conseguir obter um resultado significativo. Para isso temos a classe
-L<DataFlow::Chain>, que pode ser usada assim:
+conseguir obter um resultado significativo. O poder dos comandos pequenos está
+em juntá-los para fazer algo maior:
+
+=begin pod:xhtml
+
+<center><img style="border-width:0" src="https://github.com/russoz/artigos/raw/master/2011/03-sppm-equinocio/fig4-chain.png" /></center>
+
+=end pod:xhtml
+
+Exatamente como se fosse um I<pipe> na linha de comando. No C<DataFlow>, isso
+se faz com a classe L<DataFlow::Chain>, que pode ser usada assim:
 
     my $uc = DataFlow::Node->new(
         process_item => sub { shift; return uc(shift) }
@@ -158,6 +177,7 @@ L<DataFlow::Chain>, que pode ser usada assim:
     my $rv = DataFlow::Node->new(
         process_item => sub { shift; return scalar reverse $_[0]; }
     );
+
     my $chain = DataFlow::Chain->new( links => [ $uc, $rv ] );
 
 Um objeto da classe B<Chain> é também um B<Node>, e funciona da mesma forma:
