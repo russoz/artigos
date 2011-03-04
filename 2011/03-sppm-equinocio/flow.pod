@@ -1,22 +1,22 @@
 =encoding utf8
 
-=head1 DataFlow - um Framework Para Fluxo de Dados
+=head1 DataFlow - Um Framework Para Fluxo de Dados
 
 =head2 OpenData - O Começo e o Fim
 
 Tudo começou com um e-mail na L<lista da SP-PM|http://sao-paulo.pm.org/lista>,
-no qual se falou de "hackear" dados públicos. 
-Logo isso evoluiu para a idéia de produzir um framework para buscar e 
-analisar dados públicos. 
-Sem demora, o L<Thiago Rondon|http://www.maluco.com.br/blog/> montou um 
+no qual se falou de "hackear" dados públicos. Logo isso evoluiu para a idéia
+de produzir um framework para buscar e analisar dados públicos. Sem demora, o
+L<Thiago Rondon|http://www.maluco.com.br/blog/> montou um 
 L<repositório no GitHub|https://github.com/maluco/OpenData-BR> e começou a 
-rabiscar umas idéias de código, e logo em seguida o site do
-L<OpenData-BR|http://www.opendatabr.org/>. O projeto
-ainda tem um status de I<work in progress>, mas as expectativas e as
+rabiscar umas idéias de código. Em seguida nasceu o site do
+L<OpenData-BR|http://www.opendatabr.org/>.
+
+O projeto ainda tem um status de I<work in progress>, mas as expectativas e as
 perspectivas são muito animadoras, e espera-se que em breve o B<DataFlow>
 possa ser utilizado amplamente pelo B<OpenData-BR> para disponibilizar os
 dados públicos.
- 
+
 =head2 Primeiras Idéias
 
 =head3 Buscar dados na web (scrape)
@@ -56,8 +56,8 @@ imprimiam os dados obtidos usando o L<Data::Dumper> (para debug).
 Quanto mais pensávamos no framework, mais ele se parecia com um fluxo de dados,
 do começo (extractors) ao meio (transformers), ao fim (loaders).
 Todos os componentes pareciam, de uma forma genérica, ter o mesmo
-comportamento: recebe algo na entrada, faz alguma coisa com esses dados, e
-(eventualmente) disponibiliza esses dados em uma saída.
+comportamento: recebem algo na entrada, fazem alguma coisa com esses dados, e
+(eventualmente) disponibilizam esses dados em uma saída.
 Assim surgiu a idéia de fazer um sub-projeto de fluxo de dados.
 
 Em meados de Dezembro de 2010, a primeira idéia foi codificada em termos de
@@ -130,7 +130,7 @@ referência, use:
 
     my $out = $uc->process( { a => 'value', another => 'different value' } );
     # resultado { a => 'VALUE', another => 'DIFFERENT VALUE' } );
-    
+
 Também podemos passar I<code references> para serem processadas (usando o
 C<process_into>):
 
@@ -286,7 +286,7 @@ sancionadas por algum órgão do governo:
 
 =head3 RESULTADO
 
-Esse código irá imprimir na tela (C<STDERR>) algo como:
+Esse código imprimirá na tela (C<STDERR>) algo como:
 
 	...
 
@@ -326,7 +326,7 @@ bem como para a transformação para outros formatos, como CSV e XML.
 Vamos examinar cada nó da cadeia.
 
     LiteralData->new($base),
-	
+
 Esse nó simplesmente pega o valor de C<$base_url>, uma URL (para este exemplo
 estamos considerando que é a URL do
 B<Cadastro de Empresas Inidôneas ou Sancionadas>
@@ -394,14 +394,14 @@ HTML completo das URLs das últimas duas páginas.
 A classe L<DataFlow::HTMLFilter> é, obviamente, utilizada para filtrar conteúdo
 HTML. Essa filtragem é baseada em XPath. No caso do exemplo acima, o filtro
 irá buscar uma tag com atributo,
-B<< <div id="listagemEmpresasSancionadas"> >>, e dentro do bloco delimitado
-por essa tag, uma B<< <table> >>, dentro dela um B<< <tbody> >>, e dentro dele
-todas as tags B<< <tr> >>, que naturalmente correspondem às linhas da tabela
+C<< <div id="listagemEmpresasSancionadas"> >>, e dentro do bloco delimitado
+por essa tag, uma C<< <table> >>, dentro dela um C<< <tbody> >>, e dentro dele
+todas as tags C<< <tr> >>, que naturalmente correspondem às linhas da tabela
 com os dados que buscamos.
 
 Por I<default>, será retornado o texto HTML resultante da busca. No caso, a
 saída deste nó será um I<array> de I<strings>, cada uma contendo integralmente
-o texto HTML de cada linha (B<< <tr> >>) encontrada nas tabelas de ambas as
+o texto HTML de cada linha (C<< <tr> >>) encontrada nas tabelas de ambas as
 duas páginas, isto é, uma única seqüência de itens.
 
     HTMLFilter->new(
@@ -411,10 +411,10 @@ duas páginas, isto é, uma única seqüência de itens.
     ),
 
 Mais um filtro HTML, desta vez para obter, de cada linha da tabela os valores
-de cada célula, ou seja, de cada tag B<< <td> >> que a linha (B<< <tr> >>)
+de cada célula, ou seja, de cada tag C<< <td> >> que a linha (C<< <tr> >>)
 contiver. No entanto, aqui passamos o parâmetro C<result_type> igual a
 C<'VALUE'>, isso faz com que, por exemplo,
-B<< <tr><td>1</td><td>aa</td></tr> >>, retorne B<< ( 1, 'aa' ) >>. Mas, como
+C<< <tr><td>1</td><td>aa</td></tr> >>, retorne C<< ( 1, 'aa' ) >>. Mas, como
 cada item de uma linha são atributos de um único item (pessoa inidônea),
 gostaríamos que eles ficassem agrupados - para isso passamos o parâmetro
 C<ref_result>, que irá transformar a lista de valores de cada linha em um
@@ -516,7 +516,7 @@ L<http://www.opendatabr.org/>
 
 =head2 Agradecimento
 
-B<< Thiago "Maluco" Rondon E<lt> thiago em aware ponto com ponto br E<gt> >>
+Thiago "Maluco" Rondon C<< < thiago em aware ponto com ponto br > >>
 
 Por tirar o OpenData-BR do plano das idéias e trazê-lo para a realidade.
 Pelos testes, idéias e discussões, muitas vezes em horários excusos.
