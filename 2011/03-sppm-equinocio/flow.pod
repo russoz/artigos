@@ -97,9 +97,9 @@ I<upper-case>), usando a função C<< uc() >> padrão do Perl.
         }
     );
 
-O racional de um C<Node> é o mesmo de um comando de Unix ou Linux que atua
-como um filtro: ele é um pedaço de cano (I<pipe>), que faz uma coisa só,
-simples, e bem definida:
+O racional de um C<DataFlow::Node> é o mesmo de um comando de Unix ou Linux
+que atua como um filtro: ele é um pedaço de cano (I<pipe>), que faz uma
+coisa só, simples, e bem definida:
 
 =begin pod:xhtml
 
