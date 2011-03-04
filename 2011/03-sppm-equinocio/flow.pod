@@ -107,7 +107,7 @@ coisa só, simples, e bem definida:
 
 =end pod:xhtml
 
-E como usar esse nó? Um nó pode ser usado de mais de um jeito:
+E como usar esse nó? Seguindo a tradição, de mais de um jeito:
 
     # em duas etapas
     $uc->input( 'laranja' );
