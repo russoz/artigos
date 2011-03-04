@@ -534,13 +534,24 @@ L<http://www.opendatabr.org/>
 
 =back
 
-=head2 Agradecimento
+=head2 Agradecimentos
 
-Thiago "Maluco" Rondon C<< < thiago em aware ponto com ponto br > >>
+=over
 
-Por tirar o OpenData-BR do plano das idéias e trazê-lo para a realidade.
+=item Nelson Ferraz
+
+Por lançar a sugestão de ter o Equinócio 2011 sobre o tema
+B<Hack de Dados Públicos>. Nelson, a culpa é toda sua. ;-)
+
+=item Thiago "Maluco" Rondon
+
+Por tirar o B<OpenData-BR> do plano das idéias e trazê-lo para a realidade.
 Pelos testes, idéias e discussões, muitas vezes em horários excusos.
 Muitos dos conceitos do L<DataFlow> germinaram a partir desses momentos.
+
+=item Blabos de Blebe
+
+Pela revisão deste texto. Valeu, Blabos!!
 
 =back
 
