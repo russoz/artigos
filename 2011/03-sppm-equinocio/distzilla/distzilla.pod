@@ -1,0 +1,103 @@
+=encoding utf8
+
+=head1 Oh no!! It's Dist::Zilla!!
+
+E seus sanguinários amigos Pod::Weaver e Git-Flow.
+
+=head2 O que nós fizemos para merecer isso?
+
+A manutenção de um módulo Perl é cheia de tarefas repetitivas: configurar
+o C<Makefile.PL>, atualizar documentação, atualizar versão de dependências,
+copiar as mais diversas suítes de testes para a árvore, formatar o código,
+"I<commitar>" o código do controle de versão - eventualmente aplicar I<tags>
+nesse controle de versão e, por fim, fazer o I<upload> do módulo para o
+L<PAUSE|http://pause.perl.org/>.
+
+Especificamente do ponto de vista de documentação, há a chata tarefa de
+atualizar a versão do módulo em todos os arquivos que fazem parte dele - 
+se forem muitos, a chateação também será muita. 
+Adicionar seções com informações "repetidas", como B<AUTHOR>, B<LICENSE>,
+B<SUPPORT>, entre outros, também algo repetitivo e sujeito a erros bobos
+se feito manualmente. Alguns módulos fornecem um arquivo C<README> que é a
+renderização em texto do POD do arquivo principal do módulo - também é uma
+tarefa que poderia ser facilmente automatizada.
+
+Por fim, quando estamos trabalhando em equipe, precisamos ter um maior cuidado
+com o sistema de controle de versões, criando I<branches> edpecíficos para 
+times e/ou tarefas específicas, e realizando o I<merge> dos mesmos depois.
+O sistema de controle de versão que, se ainda não é, está se tornando o mais
+popular na comunidade Perl (e de outras lingaugens também) é o 
+L<git|http://git-scm.com/>, I<software> originalmente escrito pelo próprio 
+L<Linus Torvalds|http://en.wikipedia.org/wiki/Linus_Torvalds>. As principais
+vantagens do B<git> são:
+
+=over
+
+=item *
+Sistema distribuído: não é necessário realizar todas as operações contra um
+repositório central.
+
+=item *
+Facilidade para fazer I<branch>es e I<merge>s: o B<git> permite criar branches
+novos de desenvolvimento e realizar o merge dos mesmos com rapidez e segurança.
+
+=item *
+Software Livre e Aberto: o B<git> é B<Free Software>, B<Open Source>. Os fontes
+do B<git> estão L<disponíveis publicamente|https://github.com/git/git>.
+
+=back
+
+O B<git> viabilizou serviços como o L<github|http://github.com>, um serviço de
+hospedagem de repositórios B<git>, onde pode-se manter repositórios públicos
+gratuitamente.
+
+No entanto, não basta ter somente a ferramenta adequada, é preciso ter uma
+B<metodologia> que atenda às nossas necessidades.
+
+=head2 E agora, quem irá nos defender?
+
+
+
+=head2 Será que POD?
+
+=head2 
+
+Em 15 de Janeiro de 2010, Vincent Driessen, um desenvolver holandês, publicou
+em seu L<blog|http://nvie.com/> um modelo de desenvolvimento que ele utilizava
+em seus projetos (tanto no trabalho quanto pessoais), baseado no uso de alguns
+padrões de criação e junção de I<branches> no B<git>.
+
+=head2 Conclusão
+
+
+=head2 Referências
+
+
+=head2 Agradecimentos
+
+=head2 Autor
+
+B<< Alexei "Russo" Znamensky E<lt> russoz no cpan org E<gt> >>
+
+Twitter: L<russoz|http://twitter.com/#!/russoz>
+
+Blog: L<http://russoz.wordpress.com/>
+
+LinkedIn:
+L<http://www.linkedin.com/profile?viewProfile=&key=754668&trk=tab_pro>
+
+=head2 Licença
+
+Este texto está licenciado sob os termos da Creative Commons by-sa,
+L<http://creativecommons.org/licenses/by-sa/3.0/br/>
+
+=begin pod:xhtml
+
+<center>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/br/"><img alt="Licença Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/br/">Creative Commons Attribution-ShareAlike License</a>.
+</center>
+
+=end pod:xhtml
+
+=cut
+
