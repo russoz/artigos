@@ -268,6 +268,60 @@ Existem I<plugins> que realizam a mesma tarefa que algum I<plugin> que faz
 parte de um I<bundle>. Nesse caso, o I<plugin> declarado no I<bundle> será
 ignorado e o I<plugin> declarado no C<dist.ini> será utilizado.
 
+A escolha do conjunto de I<plugins> a utilizar depende de muitas coisas,
+mas o fator decisivo é a preferência do desenvolvedor.
+
+=head4 Exemplo Comentado
+
+Vamos colar aqui o C<dist.ini> atual do projeto L<Queue::Base> e comentar
+cada trecho.
+
+B<Informações básicas do projeto>. Particularmente, o número da versão poderia
+também ser automatizado, e será algum dia. Essas informações podem depois ser
+utilizadas para gerar documentação POD automaticamente.
+
+	name    = Queue-Base
+	version = 2.200
+	author  = Alexei Znamensky <russoz@cpan.org>
+	license = Perl_5
+	copyright_holder = Farkas Arpad
+
+B<Meta-recursos>
+
+	[MetaResources]
+	bugtracker.web  = http://github.com/russoz/Queue-Base/issues
+	repository.web  = http://github.com/russoz/Queue-Base
+	repository.url  = git://github.com/russoz/Queue-Base.git
+	repository.type = git
+
+	[@Basic]
+	[MetaJSON]
+	[ReadmeFromPod]
+	[InstallGuide]
+	[GitFmtChanges]
+	max_age    = 365
+	tag_regexp = ^.*$
+	file_name  = Changes
+	log_format = short
+
+	[OurPkgVersion]
+	[PodWeaver]
+	[AutoPrereqs]
+
+	[PerlTidy]
+	[@Git]
+
+	[ReportVersions]
+	[CompileTests]
+	[EOLTests]
+	[PodCoverageTests]
+	[UnusedVarsTests]
+	[CriticTests]
+	[HasVersionTests]
+	[KwaliteeTests]
+	[MetaTests]
+	[PodSyntaxTests]
+
 =head2 Conclusão
 
 
