@@ -2,8 +2,6 @@
 
 =head1 Oh no!! It's Dist::Zilla!!
 
-E seus sanguinários amigos Pod::Weaver e Git-Flow.
-
 =head2 O que nós fizemos para merecer isso?
 
 A manutenção de um módulo Perl é cheia de tarefas repetitivas: configurar
@@ -247,22 +245,9 @@ Para usá-lo, basta colocar no C<dist.ini>:
 	[@Basic]
 
 Esse I<bundle> é definido na classe L<Dist::Zilla::PluginBundle::Basic>, e
-corresponde aos I<plugins>:
-
-	[GatherDir]
-	[PruneCruft]
-	[ManifestSkip]
-	[MetaYAML]
-	[License]
-	[Readme]
-	[ExtraTests]
-	[ExecDir]
-	[ShareDir]
-	[MakeMaker]
-	[Manifest]
-	[TestRelease]
-	[ConfirmRelease]
-	[UploadToCPAN]
+corresponde aos I<plugins>: GatherDir, PruneCruft, ManifestSkip, MetaYAML,
+License, Readme, ExtraTests, ExecDir, ShareDir, MakeMaker, Manifest,
+TestRelease, ConfirmRelease, UploadToCPAN.
 
 Utilizando o C<< [@Basic] >> podemos (devemos!) remover os arquivos: 
 C<README>, C<LICENSE>, C<MANIFEST> e, se estivermos usando o Module::Install,
@@ -282,15 +267,6 @@ I<bundles> com seus grupos de I<plugins> prediletos.
 Existem I<plugins> que realizam a mesma tarefa que algum I<plugin> que faz 
 parte de um I<bundle>. Nesse caso, o I<plugin> declarado no I<bundle> será
 ignorado e o I<plugin> declarado no C<dist.ini> será utilizado.
-
-=head2 Será que POD?
-
-=head2 Go git, flow!
-
-Em 15 de Janeiro de 2010, Vincent Driessen, um desenvolver holandês, publicou
-em seu L<blog|http://nvie.com/> um modelo de desenvolvimento que ele utilizava
-em seus projetos (tanto no trabalho quanto pessoais), baseado no uso de alguns
-padrões de criação e junção de I<branches> no B<git>.
 
 =head2 Conclusão
 
