@@ -9,7 +9,7 @@ o C<Makefile.PL>, atualizar documentação, atualizar versão de dependências,
 copiar as mais diversas suítes de testes para a árvore, formatar o código,
 "I<commitar>" o código do controle de versão - eventualmente aplicar I<tags>
 nesse controle de versão e, por fim, fazer o I<upload> do módulo para o
-L<PAUSE|http://pause.perl.org/> [1].
+L<PAUSE|http://pause.perl.org/>[1].
 
 Especificamente do ponto de vista de documentação, há a chata tarefa de
 atualizar a versão do módulo em todos os arquivos que fazem parte dele - 
@@ -24,8 +24,8 @@ Por fim, quando estamos trabalhando em equipe, precisamos ter um maior cuidado
 com o sistema de controle de versões, criando I<branches> edpecíficos para 
 times e/ou tarefas específicas, e realizando o I<merge> dos mesmos depois.
 O sistema de controle de versão que, se ainda não é, está se tornando o mais
-popular na comunidade Perl (e de outras lingaugens também) é o 
-L<git|http://git-scm.com/>, I<software> originalmente escrito pelo próprio 
+popular na comunidade Perl (e de outras linguagens também) é o 
+L<git|http://git-scm.com>[2], I<software> originalmente escrito pelo próprio 
 L<Linus Torvalds|http://en.wikipedia.org/wiki/Linus_Torvalds>. As principais
 vantagens do B<git> são:
 
@@ -33,7 +33,8 @@ vantagens do B<git> são:
 
 =item *
 Sistema distribuído: não é necessário realizar todas as operações contra um
-repositório central.
+repositório central (ainda que ter um repositório central seja algo bom,
+em algum ponto do processo, e o B<git> não impede isso).
 
 =item *
 Facilidade para fazer I<branch>es e I<merge>s: o B<git> permite criar branches
@@ -121,7 +122,7 @@ informações solicitadas. Por exemplo:
 	license_class    = Perl_5
 	copyright_holder = Alexei Znamensky
 
-Note que o C<dzil setup> perguntou sobre usuário e senha do CPAN. Caso você
+Note que o C<dzil setup> perguntará sobre usuário e senha do CPAN. Caso você
 escolha por colocar essa informação no Dist::Zilla, ela estará presente no
 C<config.ini>. Opcionalmente você pode colocar essa informação separadamente
 no arquivo C<< ~/.pause >>:
@@ -129,8 +130,9 @@ no arquivo C<< ~/.pause >>:
 	user russoz
 	password p0t@toe5
 
-Isso é opcional, mas, naturalmente, não será possível fazer o upload do módulo
-para o CPAN sem essa informação.
+Você não é obrigado a ter essa informação em nenhum desses arquivos, isso é 
+estritamente opcional, mas, naturalmente, não será possível fazer o upload
+automático do módulo para o CPAN sem esses dados.
 
 Com isso você já está pronto para usar o Dist::Zilla no seu módulo.
 
@@ -422,11 +424,13 @@ o de documentar seu código.
 
 =head2 Referências
 
-[1] PAUSE - The [Perl programming] Authors Upload Server
-
 =over
 
-L<http://pause.perl.org/>
+=item [1]
+PAUSE - The [Perl programming] Authors Upload Server - L<http://pause.perl.org/>
+
+=item [2]
+GIT - 
 
 =back
 
@@ -435,14 +439,15 @@ L<http://pause.perl.org/>
 =over
 
 =item *
-B<Ricardo Signes (RJBS)>, pelo Dist::Zilla. Quando comecei a converter o
-processo de I<build> do Queue::Base para Dist::Zilla, entrei no canal 
+B<Ricardo Signes (RJBS)>, pelo Dist::Zilla e pela sua prestatividade. 
+Quando comecei a converter o processo de I<build> do Queue::Base para
+Dist::Zilla, entrei no canal 
 #distzilla do irc.perl.org e comentei o fato. Ele foi um dos primeiros a
-responder, se interessar e se colocar à disposição.
+responder, e a se interessar.
 
 =item *
 B<Comunidade São Paulo Perl Mongers>, pelo companheirismo, pelas infinitas
-risadas, pela dedicação com que todos zelam pela nossa lingaugem de programação
+risadas, pela dedicação com que todos zelam pela nossa linguagem de programação
 predileta.
 
 =back
