@@ -276,22 +276,19 @@ cada trecho.
 
 =head4 Informações básicas do projeto
 
-Várias informações específicas do projeto.
-Particularmente, o número da versão poderia também ser automatizado, e será
-algum dia para o Queue::Base - mas enquanto isso não ocorre, ele continua
-sendo declarado aqui. Essas informações podem depois ser utilizadas para gerar
-documentação POD automaticamente.
-
 	name    = Queue-Base
 	version = 2.200
 	author  = Alexei Znamensky <russoz@cpan.org>
 	license = Perl_5
 	copyright_holder = Farkas Arpad
 
-=head4 Meta-recursos
+Várias informações específicas do projeto.
+Particularmente, o número da versão poderia também ser automatizado, e será
+algum dia para o Queue::Base - mas enquanto isso não ocorre, ele continua
+sendo declarado aqui. Essas informações podem depois ser utilizadas para gerar
+documentação POD automaticamente.
 
-Meta-informações sobre o probjeto, como por exemplo o
-endereço da I<homepage>, e/ou o repositório de controle de versões.
+=head4 Meta-recursos
 
 	[MetaResources]
 	bugtracker.web  = http://github.com/russoz/Queue-Base/issues
@@ -299,7 +296,20 @@ endereço da I<homepage>, e/ou o repositório de controle de versões.
 	repository.url  = git://github.com/russoz/Queue-Base.git
 	repository.type = git
 
+Meta-informações sobre o probjeto, como por exemplo o
+endereço da I<homepage>, e/ou o repositório de controle de versões.
+
 =head4 Itens "Básicos"
+
+	[@Basic]
+	[MetaJSON]
+	[ReadmeFromPod]
+	[InstallGuide]
+	[GitFmtChanges]
+	max_age    = 365
+	tag_regexp = ^.*$
+	file_name  = Changes
+	log_format = short
 
 Usando a tag C<[@Basic]> incluímos todos aqueles I<plugins>
 listados acima, mas também:
@@ -326,25 +336,17 @@ modificações realizadas no projeto, a partir dos logs do B<git>.
 
 =back
 
-	[@Basic]
-	[MetaJSON]
-	[ReadmeFromPod]
-	[InstallGuide]
-	[GitFmtChanges]
-	max_age    = 365
-	tag_regexp = ^.*$
-	file_name  = Changes
-	log_format = short
-
 =head4 Versão
+
+	[OurPkgVersion]
 
 Optamos por utilizar a tag C<[OurPkgVersion]> para inserir o número
 de versão nos arquivos, tanto em código (C<< our $VERSION = x.yz >>) quanto em
 POD (C<< =head1 VERSION >>).
 
-	[OurPkgVersion]
-
 =head4 Documentação
+
+	[PodWeaver]
 
 Ao utilizar o C<[PodWeaver]> no Dist::Zilla, estamos na verdade
 utilizando o L<Pod::Weaver> para gerar trechos da documentação em formato POD.
@@ -358,9 +360,9 @@ de configuração específico, o C<weaver.ini>. Veja o
 C<< L<weaver.ini|https://github.com/russoz/DataFlow/blob/master/weaver.ini> >>
 utilizado no Queue::Base, para exemplo.
 
-	[PodWeaver]
-
 =head4 Dependências
+
+	[AutoPrereqs]
 
 O jeito mais simple é utilizar o C<[AutoPrereqs]>, que irá
 percorrer os seus arquivos levantando as dependências. Naturalmente pode haver
@@ -368,18 +370,18 @@ pequenas divergências, ou podemos querer forçar uma versão mínima específic
 de algum módulo. Para esses e outros casos, podemos usar a tag C<[Prereqs]>,
 declarando explicitamente as versões necessárias.
 
-	[AutoPrereqs]
-
 =head4 Formatação
+
+	[PerlTidy]
 
 Incluindo a tag C<[PerlTidy]> no seu C<dist.ini>, você terá a
 garantia de que o código do seu módulo será formatado de uma maneira
 consistente ANTES do empacotamento. Você pode usar as definições padrão do
 L<Perl::Tidy> ou pode fornecer o seu próprio C<perltidyrc>.
 
-	[PerlTidy]
-
 =head4 Controle de Versões
+
+	[@Git]
 
 O I<bundle> C<[@Git]>, criado por
 L<Jerome Quelin|http://search.cpan.org/~jquelin/>, engloba os I<plugins>:
@@ -392,16 +394,7 @@ versão, e o I<push> automático para o repositório remoto. Similarmente,
 existem I<plugins> para o L<Subversion|http://subversion.apache.org/> e
 o L<Mercurial|http://mercurial.selenic.com/>.
 
-	[@Git]
-
 =head4 Testes
-
-Podemos incluir testes padronizados de código, compilação, documentação e 
-estilo, adicionando I<tags> no C<dist.ini>, como pode ser visto abaixo. Duas
-das principais vantagens são: não termos de copiar arquivos de teste
-manualmente e não termos de mantê-los atualizados (sempre que fazemos o
-I<release> são utilizadas as versões atuais (presumindo que mantemos nossa
-instalação atualizada) dos módulos.
 
 	[ReportVersions]
 	[CompileTests]
@@ -413,6 +406,13 @@ instalação atualizada) dos módulos.
 	[KwaliteeTests]
 	[MetaTests]
 	[PodSyntaxTests]
+
+Podemos incluir testes padronizados de código, compilação, documentação e 
+estilo, adicionando I<tags> no C<dist.ini>, como pode ser visto abaixo. Duas
+das principais vantagens são: não termos de copiar arquivos de teste
+manualmente e não termos de mantê-los atualizados (sempre que fazemos o
+I<release> são utilizadas as versões atuais (presumindo que mantemos nossa
+instalação atualizada) dos módulos.
 
 =head2 Conclusão
 
