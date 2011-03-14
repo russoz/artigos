@@ -56,6 +56,167 @@ B<metodologia> que atenda às nossas necessidades.
 
 =head2 E agora, quem irá nos defender?
 
+L<Ricardo Signes, (RJBS)|http://rjbs.manxome.org/>, desenvolvedor
+norte-americano, membro atuante da comunidade Perl, com
+L<dezenas de módulos|http://search.cpan.org/~rjbs/> publicados no 
+L<CPAN|http://www.cpan.org/>, começou em
+L<Maio de 2008(?)|https://github.com/rjbs/dist-zilla/commit/f3854f7c675a11c6b3832dc111f72e6d705c09fa>
+um projeto ambicioso, o L<Dist::Zilla>. O Dist::Zilla, como descrito em
+L<seu site|http://dzil.org/>, é um "programa para facilitar a escrita, o
+empacotamento, o gerenciamento e a publicação de software livre". Para nós
+programadores ferrenhos e batalhadores cotidianos, isso significa: menos
+tempo gasto com códigos, arquivos e configurações I<boilerplate>, e mais tempo
+disponível para dedicar-se à codificação propriamente dita. Naturalmente, aqui,
+estamos falando de Perl - iremos usar o Dist::Zilla para escrever
+módulos e/ou aplicativos em Perl.
+
+Este artigo não pretende ser um guia completo sobre o Dist::Zilla. Para uma
+documentação mais abrangente, sugerimos ler 
+L<os tutoriais do Dist::Zilla|http://dzil.org/tutorial/start.html>. Vamos
+mostrar aqui o básico, e um pouco além.
+
+=head3 O que faz?
+
+O Dist::Zilla permite várias ações. Para executar essas ações, usamos a
+aplicação de linha de comando que vem com o Dist::Zilla, que é o comando
+C<dzil>. Alguns dos usos mais freqüentes:
+
+Rode:
+
+	$ dzil test
+	[DZ] building test distribution under .build/nQGOr0w7RL
+	...
+
+para executar todos os testes do módulo. Ou:
+
+	$ dzil build
+	...
+
+para gerar um I<build> do módulo. Ou mesmo:
+
+	$ dzil release
+	...
+
+para fazer um build, (tipicamente) rodar todos os testes e, (idem) fazer o 
+I<upload> do módulo para o CPAN.
+
+=head3 Como começar?
+
+O Dist::Zilla é controlado pelas configurações em arquivos ".ini", tanto
+para configurações do usuário quanto para configurações do projeto.
+
+Para poder ter o Dist::Zilla funcionando, você deve, antes de mais nada,
+instalá-lo:
+
+	$ cpan Dist::Zilla
+
+Uma vez que o C<cpan> termine a instalação, você terá disponível o comando
+C<dzil> no seu I<shell>. É preciso então fazer um I<setup> do Dist::Zilla:
+
+	dzil setup
+
+Esse comando irá gerar um arquivo C<< ~/.dzil/config.ini >>, contendo as
+informações solicitadas. Por exemplo:
+
+	[%User]
+	name  = Alexei Znamensky
+	email = russoz@cpan.org
+	
+	[%Rights]
+	license_class    = Perl_5
+	copyright_holder = Alexei Znamensky
+
+Note que o C<dzil setup> perguntou sobre usuário e senha do CPAN. Caso você
+escolha por colocar essa informação no Dist::Zilla, ela estará presente no
+C<config.ini>. Opcionalmente você pode colocar essa informação separadamente
+no arquivo C<< ~/.pause >>:
+
+	user russoz
+	password p0t@toe5
+
+Isso é opcional, mas, naturalmente, não será possível fazer o upload do módulo
+para o CPAN sem essa informação.
+
+Com isso você já está pronto para usar o Dist::Zilla no seu módulo.
+
+=head3 Convertendo um módulo
+
+Vamos exemplificar o uso do Dist::Zilla com a conversão de um módulo, pois fica
+mais fácil de visualizar o que substitui o quê. Esta seção é adaptada do
+tutorial escrito pelo próprio RJBS sobre
+L<conversão de um módulo|http://dzil.org/tutorial/convert-dist.html>.
+
+No começo deste ano este autor se tornou co-mantenedor do módulo
+L<Queue::Base>. Além de alguns ajustes no código do módulo, o Queue::Base foi
+utilizado como cobaia para a conversão para Dist::Zilla.
+
+Para começarmos a utilizar o Dist::Zilla, precisamos criar, no diretório raiz
+da distribuição/módulo/aplicação, um arquivo C<dist.ini>. i
+
+Basicamente os passos para conversão foram:
+
+=head4 Eliminando o Makefile.PL
+
+O C<Makefile.PL> continha o seguinte código:
+
+	use inc::Module::Install;
+	
+	name     'Queue-Base';
+	all_from 'lib/Queue/Base.pm';
+	author   q{Alexei Znamensky <russoz@cpan.org>};
+	license  'perl';
+	
+	requires 'version' => 0.77;
+	
+	build_requires 'Test::More';
+	
+	auto_install;
+	
+	WriteAll;
+
+Esse arquivo pode ser removido. Não será mais necessário.
+Ao invés dele, teremos um C<dist.init>:
+
+	name    = Queue-Base
+	version = 2.0_2
+	author  = Farkas Arpad <arpadf@cpan.org>
+	author  = Alexei Znamensky <russoz@cpan.org>
+	license = Perl_5
+	copyright_holder = Alexei Znamensky
+
+	[GatherDir]
+	[MetaYAML]
+	[ModuleInstall]        <<<<<<<<< AQUI
+	[Manifest]
+	...
+
+Notem nesse trecho comentado do 
+L<< primeiro C<dist.ini> do Queue::Base | https://github.com/russoz/Queue-Base/blob/3702c381595c0dfa6e7644bd945987b95af2e20c/dist.ini >>, que colocamos uma
+seção do C<dist.ini> na qual especificamos o uso do L<Module::Install>.
+
+Todos esses nomes de seções (com exceção dos que começam com "@" e de algumas
+seções que contém uma barra "/"), correspondem a classes no I<namespace>
+C<Dist::Zilla::Plugins::>, isto é, no trecho acima estamos referenciando as
+classes:
+
+=over
+
+=item *
+L<Dist::Zilla::Plugins::GatherDir>
+
+=item *
+L<Dist::Zilla::Plugins::MetaYAML>
+
+=item *
+L<Dist::Zilla::Plugins::ModuleInstall>
+
+=item *
+L<Dist::Zilla::Plugins::Manifest>
+
+=back
+
+
+
 
 
 =head2 Será que POD?
