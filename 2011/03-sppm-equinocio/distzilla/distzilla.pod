@@ -306,13 +306,13 @@ B<< Alexei "Russo" Znamensky E<lt> russoz no cpan org E<gt> >>
 
 =over
 
-=item
+=item *
 Twitter: L<russoz|http://twitter.com/#!/russoz>
 
-=item
+=item *
 Blog: L<http://russoz.wordpress.com/>
 
-=item
+=item *
 LinkedIn:
 L<http://www.linkedin.com/profile?viewProfile=&key=754668&trk=tab_pro>
 
