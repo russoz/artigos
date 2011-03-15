@@ -22,7 +22,7 @@ renderização em texto do POD do arquivo principal do módulo - também é uma
 tarefa que poderia ser facilmente automatizada.
 
 Por fim, quando estamos trabalhando em equipe, precisamos ter um maior cuidado
-com o sistema de controle de versões, criando I<branches> edpecíficos para 
+com o sistema de controle de versões, criando I<branches> específicos para 
 times e/ou tarefas específicas, e realizando o I<merge> dos mesmos depois.
 O sistema de controle de versão que, se ainda não é, está se tornando o mais
 popular na comunidade Perl (e de outras linguagens também) é o 
@@ -322,18 +322,18 @@ listados acima, mas também:
 =over
 
 =item * 
-C<MetaJSON]>: Escolhemos gerar B<também> um arquivo C<META.json> com as
-meta-informações do pacote para indexação no CPAN,
+C<[MetaJSON]>: Escolhemos gerar B<também> um arquivo C<META.json> com as
+meta-informações do pacote para indexação no CPAN;
 
 =item *
-C<ReadmeFromPod]>: Geramos o arquivo C<README> automaticamente a partir do
+C<[ReadmeFromPod]>: Geramos o arquivo C<README> automaticamente a partir do
 POD do arquivo principal do módulo (no caso do Queue::Base, seria o arquivo
-C<< lib/Queue/Base.pm >>, 
+C<< lib/Queue/Base.pm >>);
 
 =item *
 C<[InstallGuide]>: Geramos um arquivo C<INSTALL> com instruções de instalação
 (de acordo com o I<builder> utilizado: MakeMaker, Module::Install ou
-Module::Build)
+Module::Build);
 
 =item *
 C<[GitFmtChanges]>: Geramos o arquivo C<Changes> com a listagem das
@@ -480,16 +480,16 @@ B<[15]>
 Module::Install - "Standalone, extensible Perl module installer" - L<http://search.cpan.org/perldoc?Module::Install>
 
 B<[16]>
-Dist::Zilla::Plugin::GatherDir> - "gather all the files in a directory" - L<http://search.cpan.org/perldoc?Dist::Zilla::Plugin::GatherDir>
+Dist::Zilla::Plugin::GatherDir - "gather all the files in a directory" - L<http://search.cpan.org/perldoc?Dist::Zilla::Plugin::GatherDir>
 
 B<[17]>
-Dist::Zilla::Plugin::MetaYAML> - "produce a META.yml" - L<http://search.cpan.org/perldoc?Dist::Zilla::Plugin::MetaYAML>
+Dist::Zilla::Plugin::MetaYAML - "produce a META.yml" - L<http://search.cpan.org/perldoc?Dist::Zilla::Plugin::MetaYAML>
 
 B<[18]>
-Dist::Zilla::Plugin::ModuleInstall> - "Build Module::Install based Distributions with Dist::Zilla" - L<http://search.cpan.org/perldoc?Dist::Zilla::Plugin::ModuleInstall>
+Dist::Zilla::Plugin::ModuleInstall - "Build Module::Install based Distributions with Dist::Zilla" - L<http://search.cpan.org/perldoc?Dist::Zilla::Plugin::ModuleInstall>
 
 B<[19]>
-Dist::Zilla::Plugin::Manifest> - "build a MANIFEST file" - L<http://search.cpan.org/perldoc?Dist::Zilla::Plugin::Manifest>
+Dist::Zilla::Plugin::Manifest - "build a MANIFEST file" - L<http://search.cpan.org/perldoc?Dist::Zilla::Plugin::Manifest>
 
 B<[20]>
 Kent Frederic - Módulos no CPAN - L<http://search.cpan.org/~kentnl/>
