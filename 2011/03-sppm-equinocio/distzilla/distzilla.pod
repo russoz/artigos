@@ -16,7 +16,7 @@ Especificamente do ponto de vista de documentação, há a chata tarefa de
 atualizar a versão do módulo em todos os arquivos que fazem parte dele - 
 se forem muitos, a chateação também será muita. 
 Adicionar seções com informações "repetidas", como B<AUTHOR>, B<LICENSE>,
-B<SUPPORT>, entre outros, também algo repetitivo e sujeito a erros bobos
+B<SUPPORT>, entre outras, é também algo repetitivo e sujeito a erros bobos
 se feito manualmente. Alguns módulos fornecem um arquivo C<README> que é a
 renderização em texto do POD do arquivo principal do módulo - também é uma
 tarefa que poderia ser facilmente automatizada.
@@ -80,24 +80,22 @@ O Dist::Zilla permite várias ações. Para executar essas ações, usamos a
 aplicação de linha de comando que vem com o Dist::Zilla, que é o comando
 C<dzil>. Alguns dos usos mais freqüentes:
 
-Rode:
+Para executar toda a suíte de testes do módulo:
 
 	$ dzil test
 	[DZ] building test distribution under .build/nQGOr0w7RL
 	...
 
-para executar todos os testes do módulo. Ou:
+Para gerar um I<build> (I<tar-ball>) do módulo:
 
 	$ dzil build
 	...
 
-para gerar um I<build> do módulo. Ou mesmo:
+Para fazer um I<release>: I<build>, (opcionalmente) rodar todos os testes e,
+(idem) fazer o I<upload> do módulo para o CPAN:
 
 	$ dzil release
 	...
-
-para fazer um build, (tipicamente) rodar todos os testes e, (idem) fazer o 
-I<upload> do módulo para o CPAN.
 
 =head3 Como começar?
 
@@ -146,7 +144,7 @@ mais fácil de visualizar o que substitui o quê. Esta seção é adaptada do
 tutorial escrito pelo próprio RJBS sobre
 L<conversão de um módulo|http://dzil.org/tutorial/convert-dist.html>[12].
 
-No começo deste ano este autor se tornou co-mantenedor do módulo
+No começo deste ano este autor que aqui escreve se tornou co-mantenedor do módulo
 L<Queue::Base>[13]. Além de alguns ajustes no código do módulo, o Queue::Base foi
 utilizado como cobaia para a conversão para Dist::Zilla.
 
@@ -224,8 +222,9 @@ L<Kent Fredric|http://search.cpan.org/~kentnl/>[20].
 
 =head4 Eliminando outros arquivos
 
-Existem vários I<plugins> prontos, para realizar umai
-L<< infinidade de diferentes tarefas | http://search.cpan.org/search?query=Dist::Zilla::Plugin&mode=all >>[21]. Destacamos aqui alguns mais importantes:
+Existem vários I<plugins> prontos, para realizar uma
+L<< infinidade de diferentes tarefas | http://search.cpan.org/search?query=Dist::Zilla::Plugin&mode=all >>[21].
+Destacamos aqui alguns mais importantes:
 
 	[GatherDir]     - lista os arquivos
 	[Manifest]      - gera arquivo MANIFEST
@@ -253,9 +252,9 @@ C<[ShareDir]>, C<[MakeMaker]>, C<[Manifest]>, C<[TestRelease]>,
 C<[ConfirmRelease]>, C<[UploadToCPAN]>.
 
 Utilizando o C<< [@Basic] >> podemos (devemos!) remover os arquivos: 
-C<README>, C<LICENSE>, C<MANIFEST> e, se estivermos usando o Module::Install,
-podemos também remover o diretório C<inc/> - ele será gerado automaticamente
-durante o I<build> com os arquivos necessários.
+C<README>, C<LICENSE>, C<MANIFEST> e, se estivermos usando o
+C<[ModuleInstall]>, podemos também remover o diretório C<inc/> - ele será
+gerado automaticamente durante o I<build> com os arquivos necessários.
 
 =head4 Caçando Plugins
 
@@ -413,7 +412,7 @@ o L<Mercurial|http://mercurial.selenic.com/>[28].
 	[PodSyntaxTests]
 
 Podemos incluir testes padronizados de código, compilação, documentação e 
-estilo, adicionando I<tags> no C<dist.ini>, como pode ser visto abaixo. Duas
+estilo, adicionando I<tags> no C<dist.ini>, como pode ser visto acima. Duas
 das principais vantagens são: não termos de copiar arquivos de teste
 manualmente e não termos de mantê-los atualizados (sempre que fazemos o
 I<release> são utilizadas as versões atuais (presumindo que mantemos nossa
@@ -426,11 +425,10 @@ Dist::Zilla é um projeto em andamento. Mas é uma ferramenta indispensável
 para um desenvolvedor em Perl Moderno, que não pode ou não tem mais tempo
 para ficar repetindo as mesmas tarefas "burocráticas" a cada novo módulo.
 
-O Dist::Zilla é uma fantástica ferramenta de auxílio ao desenvolvedor.
-Ela facilita o processo de desenvolvimento, testes, I<release>, e até mesmo
-o de documentar seu código. E o melhor é que você não precisa jogar fora 
-B<tudo> o que tem pronto para começar a usá-lo: a conversão pode ser feita
-de forma gradual.
+O Dist::Zilla é uma fantástica ferramenta de apoio. Ela facilita o processo
+de desenvolvimento, testes, I<release>, e até mesmo o de documentar seu
+código. E o melhor é que você não precisa jogar fora B<tudo> o que tem
+pronto para começar a usá-lo: a conversão pode ser feita de forma gradual.
 
 =head2 Referências
 
