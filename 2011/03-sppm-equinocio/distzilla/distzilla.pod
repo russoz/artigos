@@ -29,11 +29,6 @@ popular na comunidade Perl (e de outras linguagens também) é o
 L<git|http://git-scm.com>[3], I<software> originalmente escrito pelo próprio 
 L<Linus Torvalds|http://en.wikipedia.org/wiki/Linus_Torvalds>[4].
 
-O B<git> viabilizou serviços como o L<github|http://github.com>[5], um serviço 
-público de
-hospedagem de repositórios B<git>, onde pode-se manter repositórios
-gratuitamente.
-
 As principais vantagens do B<git> são:
 
 =over
@@ -46,6 +41,11 @@ em algum ponto do processo, e o B<git> não impede isso).
 =item *
 Facilidade para fazer I<branch>es e I<merge>s: o B<git> permite criar branches
 novos de desenvolvimento e realizar o merge dos mesmos com rapidez e segurança.
+
+=item *
+O modelo de funcionamento do B<git> viabilizou serviços como o
+L<github|http://github.com>[5], um serviço público de
+hospedagem de repositórios B<git>, oferecido gratuitamente.
 
 =item *
 Software Livre e Aberto: o B<git> é B<Free Software>, B<Open Source>. Os fontes
@@ -188,14 +188,15 @@ Ao invés dele, teremos um C<dist.init>:
 	[Manifest]
 	...
 
-Um C<dist.ini> irá conter seções e definições, como informações sobre o módulo
-e o autor.
+Um C<dist.ini> irá conter I<tags> de seções e definições, como
+informações sobre o módulo e o autor.
 
 Notem nesse trecho anotado do 
-L<< primeiro C<dist.ini> do Queue::Base | https://github.com/russoz/Queue-Base/blob/3702c381595c0dfa6e7644bd945987b95af2e20c/dist.ini >>[14], que colocamos uma
-seção do C<dist.ini> na qual especificamos o uso do L<Module::Install>[15].
+L<< primeiro C<dist.ini> do Queue::Base | https://github.com/russoz/Queue-Base/blob/3702c381595c0dfa6e7644bd945987b95af2e20c/dist.ini >>[14],
+que colocamos uma I<tag> de seção na qual especificamos o uso do
+L<Module::Install>[15].
 
-Todos esses nomes de seções (com exceção aos que começarem com "@" e outros
+Todas essas I<tags> de seções (com exceção aos que começarem com "@" e outros
 que contém uma barra "/"), correspondem a classes no I<namespace>
 C<Dist::Zilla::Plugin::>, isto é, no trecho acima estamos referenciando as
 classes:
@@ -217,14 +218,14 @@ L<Dist::Zilla::Plugin::Manifest>
 =back
 
 Dessas quatro classes[16][17][18][19], Dist::Zilla::Plugin::ModuleInstall
-não faz parte do próprio Dist::Zilla, ele foi desenvolvido por
+não faz parte do próprio Dist::Zilla, ela foi desenvolvida por
 L<Kent Fredric|http://search.cpan.org/~kentnl/>[20].
 
 =head4 Eliminando outros arquivos
 
 Existem vários I<plugins> prontos, para realizar uma
 L<< infinidade de diferentes tarefas | http://search.cpan.org/search?query=Dist::Zilla::Plugin&mode=all >>[21].
-Destacamos aqui alguns mais importantes:
+Destacamos aqui alguns dos mais importantes (na opinião desde autor):
 
 	[GatherDir]     - lista os arquivos
 	[Manifest]      - gera arquivo MANIFEST
@@ -251,7 +252,7 @@ C<[MetaYAML]>, C<[License]>, C<[Readme]>, C<[ExtraTests]>, C<[ExecDir]>,
 C<[ShareDir]>, C<[MakeMaker]>, C<[Manifest]>, C<[TestRelease]>,
 C<[ConfirmRelease]>, C<[UploadToCPAN]>.
 
-Utilizando o C<< [@Basic] >> podemos (devemos!) remover os arquivos: 
+Utilizando o C<[@Basic]> podemos (devemos!) remover os arquivos: 
 C<README>, C<LICENSE>, C<MANIFEST> e, se estivermos usando o
 C<[ModuleInstall]>, podemos também remover o diretório C<inc/> - ele será
 gerado automaticamente durante o I<build> com os arquivos necessários.
@@ -266,9 +267,9 @@ I<plugins> você precisa instalar, basta rodar:
 É possível criar novos I<bundles>, e é uma prática comum que os autores criem
 I<bundles> com seus grupos de I<plugins> prediletos.
 
-Existem I<plugins> que realizam a mesma tarefa que algum I<plugin> que faz 
-parte de um I<bundle>. Nesse caso, o I<plugin> declarado no I<bundle> será
-ignorado e o I<plugin> declarado no C<dist.ini> será utilizado.
+Existem I<plugins> que realizam a mesma tarefa que algum I<plugin> que já faz 
+parte de um I<bundle> que esteja em uso. Nesse caso, o I<plugin> declarado no
+I<bundle> será ignorado e o I<plugin> declarado no C<dist.ini> será utilizado.
 
 A escolha do conjunto de I<plugins> a utilizar depende de muitas coisas,
 mas o fator decisivo é a preferência do desenvolvedor.
@@ -286,8 +287,8 @@ cada trecho.
 	license = Perl_5
 	copyright_holder = Farkas Arpad
 
-Várias informações específicas do projeto.
-Particularmente, o número da versão poderia também ser automatizado, e será
+Várias informações específicas do projeto: nome, autor, tipo de licença, etc..
+Particularmente, o número da versão poderia ser automatizado, e será
 algum dia para o Queue::Base - mas enquanto isso não ocorre, ele continua
 sendo declarado aqui. Essas informações podem depois ser utilizadas para gerar
 documentação POD automaticamente.
@@ -300,8 +301,8 @@ documentação POD automaticamente.
 	repository.url  = git://github.com/russoz/Queue-Base.git
 	repository.type = git
 
-Meta-informações sobre o probjeto, como por exemplo o
-endereço da I<homepage>, e/ou o repositório de controle de versões.
+Meta-informações sobre o probjeto, como por exemplo o endereço da I<homepage>,
+onde reportar erros, o repositório de controle de versões.
 
 =head4 Itens "Básicos"
 
@@ -315,28 +316,31 @@ endereço da I<homepage>, e/ou o repositório de controle de versões.
 	file_name  = Changes
 	log_format = short
 
-Usando a tag C<[@Basic]> incluímos todos aqueles I<plugins>
+Usando a I<tag> C<[@Basic]> incluímos todos aqueles I<plugins>
 listados acima, mas também:
 
 =over
 
-=item * 
-C<[MetaJSON]>: Escolhemos gerar B<também> um arquivo C<META.json> com as
-meta-informações do pacote para indexação no CPAN;
+=item * C<[MetaJSON]>
 
-=item *
-C<[ReadmeFromPod]>: Geramos o arquivo C<README> automaticamente a partir do
-POD do arquivo principal do módulo (no caso do Queue::Base, seria o arquivo
-C<< lib/Queue/Base.pm >>);
+Escolhemos gerar B<também> um arquivo C<META.json> com as meta-informações do
+pacote para indexação no CPAN;
 
-=item *
-C<[InstallGuide]>: Geramos um arquivo C<INSTALL> com instruções de instalação
-(de acordo com o I<builder> utilizado: MakeMaker, Module::Install ou
-Module::Build);
+=item * C<[ReadmeFromPod]>
 
-=item *
-C<[GitFmtChanges]>: Geramos o arquivo C<Changes> com a listagem das
-modificações realizadas no projeto, a partir dos logs do B<git>.
+Geramos o arquivo C<README> automaticamente a partir do POD do arquivo
+principal do módulo (no caso do Queue::Base, seria o arquivo
+C<lib/Queue/Base.pm>);
+
+=item * C<[InstallGuide]>
+
+Geramos um arquivo C<INSTALL> com instruções de instalação (de acordo com o
+I<builder> utilizado: MakeMaker, Module::Install ou Module::Build);
+
+=item * C<[GitFmtChanges]>
+
+Geramos o arquivo C<Changes> com a listagem das modificações realizadas no
+projeto, a partir dos logs do B<git>.
 
 =back
 
@@ -344,7 +348,7 @@ modificações realizadas no projeto, a partir dos logs do B<git>.
 
 	[OurPkgVersion]
 
-Optamos por utilizar a tag C<[OurPkgVersion]> para inserir o número
+Optamos por utilizar a I<tag> C<[OurPkgVersion]> para inserir o número
 de versão nos arquivos, tanto em código (C<< our $VERSION = x.yz >>) quanto em
 POD (C<< =head1 VERSION >>).
 
@@ -371,14 +375,14 @@ utilizado no Queue::Base, para exemplo.
 O jeito mais simple é utilizar o C<[AutoPrereqs]>, que irá
 percorrer os seus arquivos levantando as dependências. Naturalmente pode haver
 pequenas divergências, ou podemos querer forçar uma versão mínima específica
-de algum módulo. Para esses e outros casos, podemos usar a tag C<[Prereqs]>,
+de algum módulo. Para esses e outros casos, podemos usar a I<tag> C<[Prereqs]>,
 declarando explicitamente as versões necessárias.
 
 =head4 Formatação
 
 	[PerlTidy]
 
-Incluindo a tag C<[PerlTidy]> no seu C<dist.ini>, você terá a
+Incluindo a I<tag> C<[PerlTidy]> no seu C<dist.ini>, você terá a
 garantia de que o código do seu módulo será formatado de uma maneira
 consistente ANTES do empacotamento. Você pode usar as definições padrão do
 L<Perl::Tidy>[25] ou pode fornecer o seu próprio C<perltidyrc>.
@@ -528,6 +532,10 @@ Pelo Dist::Zilla e pela sua prestatividade.
 
 Pelo companheirismo, pelas infinitas risadas, pela dedicação com que todos zelam
 pela nossa linguagem de programação predileta.
+
+=item Blabos de Blebe
+
+Obrigado pelo olho clínico, revisando este artigo.
 
 =back
 
