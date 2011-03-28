@@ -66,7 +66,7 @@ Em meados de Dezembro de 2010, a primeira idéia foi codificada em termos de
 
 =begin pod:xhtml
 
-<center><img style="border-width:0" src="https://github.com/russoz/artigos/raw/master/2011/03-sppm-equinocio/fig1-porco-salsicha.png" /></center>
+<center><img style="border-width:0" src="fig1-porco-salsicha.png" /></center>
 
 =end pod:xhtml
 
@@ -75,7 +75,7 @@ porquinhos:
 
 =begin pod:xhtml
 
-<center><img style="border-width:0" src="https://github.com/russoz/artigos/raw/master/2011/03-sppm-equinocio/fig2-porco-salsicha.png" /></center>
+<center><img style="border-width:0" src="fig2-porco-salsicha.png" /></center>
 
 =end pod:xhtml
 
@@ -86,24 +86,93 @@ Assim surgiu, dentro do repositório do B<OpenData>, o sub-projeto que foi,
 inicialmente, denominado de I<"Box">. Depois se tornou o I<"Flow"> e, enquanto
 este artigo é escrito, tornou-se um projeto independente, o I<"DataFlow">.
 
-=head2 Show Me The Node
+As primeiras versões do L<DataFlow> tinham o conceito de nós (I<nodes>) e
+"encadeamentos" (I<chains>) de nós. Mas, eventualmente, percebemos que um 
+C<Node> era equivalente a um C<Chain> com apenas um elemento.
+Mais que isso, a partir do momento em que, internamente, o 
+C<DataFlow> precisa gerenciar as filas de entrada e saída em cada nó, e também
+no encadeamento, fez-se necessário partir para uma abordagem diferente.
 
-Um exemplo básico de um nó que transforma os dados para caixa-alta (
-I<upper-case>), usando a função C<< uc() >> padrão do Perl.
+Toda a lógica de um fluxo de dados pode ser resumida a uma lista de rotinas,
+e a filas para atuar como I<buffer> entre cada rotina. Passamos a usar então
+os conceitos de "processador" (I<Processor>, ou "Proc") para representar as
+"rotinas", e o próprio fluxo-de-dados (I<DataFlow>), para representar a
+integração das rotinas - basicamente as filas.
 
-    my $uc = DataFlow::Node->new(
-        process_item => sub {
-            shift; return uc(shift);
-        }
-    );
+Assim, o L<DataFlow> assume uma interface bem mais simplificada, o que ajudará
+bastante aos implementadores dos fluxos de dados. Veja um exemplo:
+
+	# flow com um único processador
+	my $uc = DataFlow->new(
+		sub { return uc(shift) }
+	);
+
+	print $uc->process('aa');                  # imprime 'AA'
+
+	# flow com dois processadores
+	my $flow = DataFlow->new(
+		procs => [
+			sub { return uc(shift) },
+			sub { return scalar reverse $_[0] },
+		]
+	);
+
+	print $flow->process('abcdef');            # imprime 'FEDCBA'
+
+O L<DataFlow> irá transformar essas subrotinas em objetos L<DataFlow::Proc>,
+mas ninguém precisa ficar sabendo disso. O código acima é equivalente a:
+
+	my $uc = DataFlow->new(
+		procs => [
+			DataFlow::Proc->new( p => sub { return uc(shift) } ),
+		]
+	);
+
+	my $flow = DataFlow->new(
+		procs => [
+			DataFlow::Proc->new( p => sub { return uc(shift) } ),
+			DataFlow::Proc->new( p => sub { return scalar reverse $_[0] } ),
+		]
+	);
+
+E seguindo a boa tradição da linguagem Perl, podemos usar o I<dataflow> de
+mais de uma forma:
+
+	$uc->input( 'aa', 'bb', 'cc' );
+	
+	# one by one
+	my $first  = $uc->output;
+	my $second = $uc->output;
+	my $third  = $uc->output;
+
+	# or flushing everything at once
+	my @res = $uc->flush;
+
+	# or process everything in one single blow
+	my @res = $uc->process( 'aa', 'bb', 'cc' );
+
+Além disso o L<DataFlow>
 
 O racional de um C<DataFlow::Node> é o mesmo de um comando de Unix ou Linux
-que atua como um filtro: ele é um pedaço de cano (I<pipe>), que faz uma
-coisa só, simples, e bem definida:
+que atua como um filtro. E a idéia de um C<DataFlow::Chain> seria a mesma de
+um I<pipe> na linha de comando, e se usaria assim:
+
+    my $uc = DataFlow::Node->new(
+        process_item => sub { shift; return uc(shift) }
+    );
+    my $rv = DataFlow::Node->new(
+        process_item => sub { shift; return scalar reverse $_[0]; }
+    );
+
+    my $chain = DataFlow::Chain->new( links => [ $uc, $rv ]
+
+=head3 Mais! Mais! Mais!
+
+
 
 =begin pod:xhtml
 
-<center><img style="border-width:0" src="https://github.com/russoz/artigos/raw/master/2011/03-sppm-equinocio/fig3-node.png" /></center>
+<center><img style="border-width:0" src="fig3-node.png" /></center>
 
 =end pod:xhtml
 
@@ -167,18 +236,6 @@ em juntá-los para fazer algo maior:
 <center><img style="border-width:0" src="https://github.com/russoz/artigos/raw/master/2011/03-sppm-equinocio/fig4-chain.png" /></center>
 
 =end pod:xhtml
-
-Exatamente como se fosse um I<pipe> na linha de comando. No C<DataFlow>, isso
-se faz com a classe L<DataFlow::Chain>, que pode ser usada assim:
-
-    my $uc = DataFlow::Node->new(
-        process_item => sub { shift; return uc(shift) }
-    );
-    my $rv = DataFlow::Node->new(
-        process_item => sub { shift; return scalar reverse $_[0]; }
-    );
-
-    my $chain = DataFlow::Chain->new( links => [ $uc, $rv ] );
 
 Um objeto da classe B<Chain> é também um B<Node>, e funciona da mesma forma:
 
