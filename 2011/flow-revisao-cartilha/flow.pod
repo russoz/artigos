@@ -119,7 +119,7 @@ bastante aos implementadores dos fluxos de dados. Veja um exemplo:
 
 	print $flow->process('abcdef');            # imprime 'FEDCBA'
 
-O L<DataFlow> irá transformar essas subrotinas em objetos L<DataFlow::Proc>,
+O C<DataFlow> irá transformar essas subrotinas em objetos L<DataFlow::Proc>,
 mas ninguém precisa ficar sabendo disso. O código acima é equivalente a:
 
 	my $uc = DataFlow->new(
@@ -135,6 +135,8 @@ mas ninguém precisa ficar sabendo disso. O código acima é equivalente a:
 		]
 	);
 
+Notem que as subs correspondem ao atributo C<p> na classe C<DataFlow::Proc>.
+
 E seguindo a boa tradição da linguagem Perl, podemos usar o I<dataflow> de
 mais de uma forma:
 
@@ -148,26 +150,43 @@ mais de uma forma:
 	# or flushing everything at once
 	my @res = $uc->flush;
 
-	# or process everything in one single blow
+	# or process everything in one single call
 	my @res = $uc->process( 'aa', 'bb', 'cc' );
 
-Além disso o L<DataFlow>
+Além disso o C<DataFlow> irá processar referências com alguma inteligência:
 
-O racional de um C<DataFlow::Node> é o mesmo de um comando de Unix ou Linux
-que atua como um filtro. E a idéia de um C<DataFlow::Chain> seria a mesma de
-um I<pipe> na linha de comando, e se usaria assim:
+	my $res = $uc->process( [ qw/aa bb cc/ ] );
+	# $res = [ 'AA', 'BB', 'CC' ]
 
-    my $uc = DataFlow::Node->new(
-        process_item => sub { shift; return uc(shift) }
-    );
-    my $rv = DataFlow::Node->new(
-        process_item => sub { shift; return scalar reverse $_[0]; }
-    );
+	my $res = $uc->process( { 'aa' => 'bb', 'cc' => 'dd' } );
+	# $res = { 'aa' => 'BB', 'cc' => 'DD' }
 
-    my $chain = DataFlow::Chain->new( links => [ $uc, $rv ]
+Também podemos passar I<code references> para serem processadas (usando o
+C<process_into>):
 
-=head3 Mais! Mais! Mais!
+    my $code = sub { return 'batatas' };
+    my $out = $uc->process( $code );
+    print $out->();                         # imprime 'BATATAS'
 
+Se quisermos desabilitar esse comportamento, precisamos explicitamente criar um
+objeto da classe C<DataFLow::Proc>, desabilitando o processamento de
+informações apontadas por referências:
+
+	my $uc_noref = DataFlow->new(
+		DataFlow::Proc->new(
+			process_into => 0,
+			p => sub {
+				return uc(shift);
+			},
+		)
+	);
+
+	my $res = $uc_noref->process( [ qw/aa bb cc/ ] );
+	# $res = [ 'aa', 'bb', 'cc' ]
+
+O racional de um C<DataFlow::Proc> é o mesmo de um comando de Unix ou Linux
+que atua como um filtro, como o C<sort> e/ou o C<grep>. E a idéia de um
+C<DataFlow> seria a mesma de um I<pipe> na linha de comando.
 
 
 =begin pod:xhtml
@@ -176,124 +195,54 @@ um I<pipe> na linha de comando, e se usaria assim:
 
 =end pod:xhtml
 
-E como usar esse nó? Seguindo a tradição, de mais de um jeito:
-
-    # em duas etapas
-    $uc->input( 'laranja' );
-    my $out = $uc->output();  # LARANJA
-
-    # ou em um unica etapa
-    my $out = $uc->process('laranja');
-
-    # podemos passar arrays
-    my @out = $uc->process( qw/feira da fruta/ ); # qw/FEIRA DA FRUTA/
-
-    # podemos passar referencias
-    my $out = $uc->process( [ 'oh', 'my', 'god' ] );
-
-B<Atenção>: nesta última forma, os elementos do ArrayRef B<não> serão
-transformados, pois você pode ter um node que espera de fato uma I<reference>
-e a trata de acordo com suas próprias regras. O mesmo se aplica a outros tipos
-de referência. Se você quer que o node processe a informação B<dentro> da
-referência, use:
-
-    my $uc = DataFlow::Node->new(
-        process_into => 1,
-        process_item => sub {
-            shift; return uc(shift);
-        }
-    );
-
-    my $out = $uc->process( [ 'oh', 'my', 'god' ] );
-    # resultado: [ 'OH', 'MY', 'GOD' ]
-
-    my $out = $uc->process( { a => 'value', another => 'different value' } );
-    # resultado { a => 'VALUE', another => 'DIFFERENT VALUE' } );
-
-Também podemos passar I<code references> para serem processadas (usando o
-C<process_into>):
-
-    my $code = sub { return 'batatas' };
-    my $out = $uc->process( $code );
-    print $out->(); # imprime 'BATATAS'
-
-Notem que, quando são passadas referências, sempre são retornadas referências
-do mesmo tipo. Neste último caso C<$out> contém um I<code reference> que,
-ao ser invocado, aplica a função C<uc()> ao resultado do I<code reference>
-passado ao node.
-
-B<Futuro>: Talvez o parâmetro C<process_into> passe a ser habilitado por
-I<default>. Isso está sendo considerado.
-
-=head3 Chains
-
-Um I<node> sozinho não faz um I<hack>, então é preciso "enfileirar" os nós para
-conseguir obter um resultado significativo. O poder dos comandos pequenos está
-em juntá-los para fazer algo maior:
-
 =begin pod:xhtml
 
-<center><img style="border-width:0" src="https://github.com/russoz/artigos/raw/master/2011/03-sppm-equinocio/fig4-chain.png" /></center>
+<center><img style="border-width:0" src="fig4-chain.png" /></center>
 
 =end pod:xhtml
 
-Um objeto da classe B<Chain> é também um B<Node>, e funciona da mesma forma:
+=head3 Biblioteca de Processadores
 
-	$chain->input( qw/abc def ghi/ );
-	my @result = $chain->output();
-	# @result == qw/CBA FED IHG/
-
-=head3 Biblioteca de Nós
-
-Algumas operações são mais comuns, e nós especializados podem ser criados
-para executar processamentos específicos. O pacote L<DataFlow>, contém ainda
-apenas um pequeno número dessas classes, mas com o tempo isso deve aumentar.
+Algumas operações são mais comuns, e processadores especializados podem ser
+criados para executar rotinas específicas. O pacote L<DataFlow>, contém ainda
+apenas um pequeno número dessas classes, mas que deve aumentar com o tempo.
 Alguns exemplos de classes já disponíveis hoje são:
 
 =over
 
-=item L<DataFlow::Chain>
+=item L<DataFlow::Proc::CSV>
 
-Tipo especial de nó, que possui uma lista de nós, e concatena esses nós, como
-descrito acima.
+Processador que transforma array references em strings no formato CSV.
 
-=item L<DataFlow::Node::CSV>
+=item L<DataFlow::Proc::Dumper>
 
-Nó que transforma array references em strings no formato CSV.
-
-=item L<DataFlow::Node::Dumper>
-
-Nó que utiliza o módulo L<Data::Dumper> para imprimir a estrutura de cada item
+Processador que utiliza o módulo L<Data::Dumper> para imprimir a estrutura de cada item
 para STDERR.
 
-=item L<DataFlow::Node::HTMLFilter>
+=item L<DataFlow::Proc::HTMLFilter>
 
-Nó utilizado para filtrar tags de um documento HTML utilizando
+Processador utilizado para filtrar tags de um documento HTML utilizando
 L<HTML::TreeBuilder::XPath>. Pode produzir nodes (L<HTML::Element>), HTML ou
 somente os valores de tags e/ou atributos.
 
-=item L<DataFlow::Node::LiteralData>
+=item L<DataFlow::Proc::MultiPageURLGenerator>
 
-Nó que injeta na sua fila de entrada os parâmetros passados ao construtor.
-
-=item L<DataFlow::Node::MultiPageURLGenerator>
-
-Nó utilizado para gerar uma lista de URLs com os endereços de todas as páginas
+Processador utilizado para gerar uma lista de URLs com os endereços de todas as páginas
 web de um conjunto de dados.
 
-=item L<DataFlow::Node::NOP>
+=item L<DataFlow::Proc::NOP>
 
-Nó "NO-OP". A informação sai do mesmo jeito que entrou. Pode ser utilizado como
+Processador "NO-OP". A informação sai do mesmo jeito que entrou. Pode ser utilizado como
 classe base para outras classes, ou apenas para alterar algum atributo do fluxo
 de dados.
 
-=item L<DataFlow::Node::Null>
+=item L<DataFlow::Proc::Null>
 
-Nó que sempre retorna C<undef>.
+Processador que sempre retorna C<undef>.
 
-=item L<DataFlow::Node::URLRetriever>
+=item L<DataFlow::Proc::URLRetriever>
 
-Nó que recebe URLs na entrada, e retorna o conteúdo das mesmas na saída.
+Processador que recebe URLs na entrada, e retorna o conteúdo das mesmas na saída.
 
 =back
 
@@ -305,14 +254,13 @@ de dados disponíveis em sites na web.
 
 =head3 DATAFLOW EM AÇÃO
 
-Por exemplo, o trecho de script abaixo (baseado em
-L<df-portaltransparencia.pl|http://goo.gl/Vxw4f>), obtém as informações das
+Por exemplo, o trecho de script abaixo (baseado no script
+L<ceis.pl|XXXXXXXXXXXXXXXXXXXXXXXXX>), obtém as informações das
 pessoas (físicas e jurídicas) consideradas inidôneas e/ou que tenham sido
 sancionadas por algum órgão do governo:
 
-	my $chain = Chain->new(
-	    links => [
-	        LiteralData->new($base_url),
+	my $flow = DataFlow->new(
+	    procs => [
 	        MultiPageURLGenerator->new(
 	            first_page => -1,
 	            produce_last_page => sub {
@@ -348,18 +296,17 @@ sancionadas por algum órgão do governo:
 	            result_type  => 'VALUE',
 	            ref_result   => 1,
 	        ),
-	        Node->new(
-	            process_into => 1,
-	            process_item => sub {
-	                shift; local $_ = shift; s/^\s*//; s/\s*$//;
-	                return $_;
-	            }
-	        ),
-	        DataFlow::Node::Dumper->new,
+	        sub {
+	            local $_ = shift;
+				s/^\s*//; s/\s*$//;
+	            return $_;
+	        },
+	        DataFlow::Proc::Dumper->new,
 	    ],
 	);
 
-	$chain->flush;
+	$flow->input($base_url);
+	$flow->flush;
 
 =head3 RESULTADO
 
@@ -402,16 +349,6 @@ bem como para a transformação para outros formatos, como CSV e XML.
 
 Vamos examinar cada nó da cadeia.
 
-    LiteralData->new($base),
-
-Esse nó simplesmente pega o valor de C<$base_url>, uma URL (para este exemplo
-estamos considerando que é a URL do
-B<Cadastro de Empresas Inidôneas ou Sancionadas>
-do site L<PortalTransparência|http://www.portaltransparencia.gov.br>) e a
-injeta na fila de entrada do nó. O objeto do tipo
-L<DataFlow::Node::LiteralData> não modifica o valor,
-logo essa URL será o único item de saída desse nó.
-
     MultiPageURLGenerator->new(
         first_page => -2,
         produce_last_page => sub {
@@ -424,7 +361,7 @@ logo essa URL será o único item de saída desse nó.
         },
     ),
 
-A classe L<DataFlow::Node::MultiPageURLGenerator> serve para gerar, a partir
+A classe L<DataFlow::Proc::MultiPageURLGenerator> serve para gerar, a partir
 de uma URL base, uma lista de URLs que correspondam às várias páginas nas
 quais aquele conjunto de dados se encontra. É obrigatório prover a I<sub>
 anônima C<make_page_url>. Esta I<sub> irá receber uma URL C<$url> e um número
@@ -500,15 +437,16 @@ I<ArrayRef> para essa lista.
 A saída deste nó é um I<array> de I<ArrayRef>s, cada um contendo os dados de
 cada pessoa listada nas últimas duas páginas do cadastro no site.
 
-    Node->new(
+    Proc->new(
         process_into => 1,
-        process_item => sub {
-            shift; local $_ = shift; s/^\s*//; s/\s*$//;
+        p => sub {
+            local $_ = shift;
+			s/^\s*//; s/\s*$//;
             return $_;
         }
     ),
 
-Aqui criamos um nó do próprio tipo L<DataFlow::Node>, ao qual fornecemos o
+Aqui criamos um nó do próprio tipo L<DataFlow::Proc>, ao qual fornecemos o
 código C<process_item>, que irá, neste caso, remover eventuais espaços em
 branco no início e no final de cada dado, dentro de cada I<ArrayRef> - isso
 ocorre devido ao uso do parâmetro C<process_into>.
@@ -516,18 +454,26 @@ ocorre devido ao uso do parâmetro C<process_into>.
 A saída desse nó terá a mesma estrutura de dados do nó anterior, mas o conteúdo
 terá os espaços iniciais e finais removidos.
 
-	DataFlow::Node::Dumper->new,
+	DataFlow::Proc::Dumper->new,
 
-Este nó, do tipo L<DataFlow::Node::Dumper>, utiliza o módulo L<Data::Dumper>
+Este nó, do tipo L<DataFlow::Proc::Dumper>, utiliza o módulo L<Data::Dumper>
 para imprimir em C<STDERR> o conteúdo de cada item de dado. Neste caso ele
 listará, para cada pessoa inidônea ou sancionada das últimas duas páginas do
 cadastro, o conteúdo do I<ArrayRef> contendo os dados da pessoa.
 
-Para colocar a B<Chain> em ação, invocamos o método C<flush()>, que irá
-consumir itens da saída de um nó, no caso C<$chain>, até que não haja
-mais itens.
+	$flow->input($base_url);
 
-    $chain->flush;
+Essa operação pega o valor de C<$base_url>, uma URL (para este exemplo
+estamos considerando que é a URL do
+B<Cadastro de Empresas Inidôneas ou Sancionadas>
+do site L<PortalTransparência|http://www.portaltransparencia.gov.br>), e a
+injeta na fila de entrada do I<dataflow>.
+
+    $flow->flush;
+
+Para colocar o C<DataFlow> em ação, invocamos o método C<flush()>, que irá
+consumir todos os itens inseridos no fluxo, no caso C<$flow>, até que não haja
+mais itens, e irá retornar todo(s) o(s) resultado(s).
 
 =head2 Conclusão
 
@@ -543,24 +489,24 @@ Já existem várias idéias de melhorias, como por exemplo:
 
 =item * Execução em paralelo (com threads, com forks)
 
-=item * Nó para leitura/escrita de arquivos (em andamento)
+=item * Processador para leitura/escrita de arquivos (em andamento)
 
-=item * Nó para I<encoding> de caracteres (em andamento)
+=item * Processador para I<encoding> de caracteres (em andamento)
 
-=item * Nó para envio/recebimento de mensagens em filas (RabbitMQ, MQ, etc...)
+=item * Processador para envio/recebimento de mensagens em filas (RabbitMQ, MQ, etc...)
 
-=item * Nó para geração de dados em formato RDF
+=item * Processador para geração de dados em formato RDF
 
-=item * Nó para decodificar imagens com OCR
+=item * Processador para decodificar imagens com OCR
 
-=item * Nó para executar comandos externos
+=item * Processador para executar comandos externos
 (enviar ou receber dados para esses comandos)
 
 =item * Uso de operadores (concatenação de nós seria uma cadeia)
 
 =item * Construção de nós (e principalmente cadeias de nós) a partir de especificações em JSON e/ou YAML
 
-=item * Nós que permitam I<split> e I<join> de fluxos de informação
+=item * Processadores que permitam I<split> e I<join> de fluxos de informação
 
 =back
 
