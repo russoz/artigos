@@ -216,8 +216,8 @@ Processador que transforma array references em strings no formato CSV.
 
 =item L<DataFlow::Proc::Dumper>
 
-Processador que utiliza o módulo L<Data::Dumper> para imprimir a estrutura de cada item
-para STDERR.
+Processador que utiliza o módulo L<Data::Dumper> para imprimir a estrutura de
+cada item para STDERR.
 
 =item L<DataFlow::Proc::HTMLFilter>
 
@@ -232,9 +232,9 @@ web de um conjunto de dados.
 
 =item L<DataFlow::Proc::NOP>
 
-Processador "NO-OP". A informação sai do mesmo jeito que entrou. Pode ser utilizado como
-classe base para outras classes, ou apenas para alterar algum atributo do fluxo
-de dados.
+Processador "NO-OP". A informação sai do mesmo jeito que entrou. Pode ser
+utilizado como classe base para outras classes, ou apenas para alterar algum
+atributo do fluxo de dados.
 
 =item L<DataFlow::Proc::Null>
 
@@ -242,7 +242,8 @@ Processador que sempre retorna C<undef>.
 
 =item L<DataFlow::Proc::URLRetriever>
 
-Processador que recebe URLs na entrada, e retorna o conteúdo das mesmas na saída.
+Processador que recebe URLs na entrada, e retorna o conteúdo das mesmas na
+saída.
 
 =back
 
@@ -254,8 +255,8 @@ de dados disponíveis em sites na web.
 
 =head3 DATAFLOW EM AÇÃO
 
-Por exemplo, o trecho de script abaixo (baseado no script
-L<ceis.pl|XXXXXXXXXXXXXXXXXXXXXXXXX>), obtém as informações das
+Por exemplo, o trecho de script abaixo (baseado no script C<ceis.pl>, parte
+integral da distribuição do DataFlow), obtém as informações das
 pessoas (físicas e jurídicas) consideradas inidôneas e/ou que tenham sido
 sancionadas por algum órgão do governo:
 
@@ -543,7 +544,7 @@ L<http://www.opendatabr.org/>
 
 =item Nelson Ferraz
 
-Por lançar a sugestão de ter o Equinócio 2011 sobre o tema
+Por lançar a sugestão de ter o Equinócio de Março/2011 sobre o tema
 B<Hack de Dados Públicos>. Nelson, a culpa é toda sua. ;-)
 
 =item Thiago "Maluco" Rondon
