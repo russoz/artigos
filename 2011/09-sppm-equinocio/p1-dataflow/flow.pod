@@ -1,0 +1,358 @@
+=encoding utf8
+
+=head1 DataFlow - Um Framework Para Fluxo de Dados
+
+Neste artigo vamos falar um pouco mais sobre o L<DataFlow>, as melhorias que
+ocorreram desde o L<último artigo|http://sao-paulo.pm.org/equinocio/2011/mar/5>
+sobre ele, e algumas das idéias que estão guiando o seu futuro.
+
+=head2 Histórico
+
+O histórico do projeto DataFlow remonta à iniciativa 
+L<OpenData-BR|http://www.opendatabr.org/>, e já foi descrito em mais detalhes
+no artigo do Equinócio de Março da São Paulo Perl Mongers.
+
+Vale lembrar que o projeto ainda retém o status de I<work in progress>,
+mas as expectativas e as perspectivas são cada vez mais animadoras.
+Não perdemos de vista o objetivo de utilizar o B<DataFlow> para
+disponibilizar os dados públicos no projeto
+L<OpenData-BR|http://opendatabr.org/>.
+
+=head2 Flow, Baby, Flow
+
+O B<< Data Flow >> não é um software conceitualmente complexo, muito pelo
+contrário, ele é extremamente simples. A idéia básica de um B<Data Flow> é uma
+lista de B<Processadores> que transformam a informação. 
+
+                 Fluxo de Informações
+
+       ===>||====>||==  ...  =>||========>||====>
+
+                      Filas
+
+    Q0    Q1    Q2          Q(n-1)       Qn    Qlast  =>  SAÍDA
+      \  /  \  /  \     ...       \      /  \  /
+       P0    P1    P2              P(n-1)    Pn
+
+                   Processadores
+
+Todos os componentes têm um comportamento muito parecido: recebem algo na
+entrada, fazem alguma coisa com esses dados, e
+(eventualmente) disponibilizam esses dados em uma saída.  De uma forma bem
+genérica, "entra porquinho, sai salsicha":
+
+=begin pod:xhtml
+
+<center><img style="border-width:0" src="fig1-porco-salsicha.png" /></center>
+
+=end pod:xhtml
+
+Em termos de programação em B<Perl>, podemos colocar vários tipos de
+porquinhos:
+
+=begin pod:xhtml
+
+<center><img style="border-width:0" src="fig2-porco-salsicha.png" /></center>
+
+=end pod:xhtml
+
+Cada B<Processador> possui uma fila associada a ele. Todos os dados são
+colocados primeiramente na fila, e o Processador irá, posteriormente, receber
+um elemento de cada vez. As filas funcionam como I<buffers> que absorvem a
+carga de dados.
+
+=head2 Fluindo
+
+Criar e usar um DataFlow é bem simples e pode ser feito de várias formas.
+Vamos começar com um exemplo trivial, utilizando apenas I<subs> comuns:
+
+  my $flow = DataFlow->new([
+    sub { uc },
+	sub { scalar reverse },  # precisa do scalar para não tratar como array
+  ]);
+
+Com isso nós criamos um objeto DataFlow que transforma todos os dados
+fornecidos em maiúsculas e reverte a ordem das letras. Notem que, em nenhuma
+das duas funções foi necessário definir qualquer passagem de parâmetros. A
+variavel C<< $_ >> é inicializada localmente para o valor do dado a ser
+processado.
+
+As funções são automagicamente transformadas em objetos do tipo
+L<DataFlow::Proc>, e o único contrato de interface que elas têm é: tratar o
+valor que vier em C<< $_ >> e retornar uma lista com zero ou mais elementos.
+O que vier, será colocado na próxima fila.
+
+Para utilizar esse DataFlow, basta prover dados na entrada, e obter o resultado
+na saída:
+
+  $flow->input('abcdef');
+  say $flow->output;
+  # resultado 'FEDCBA' para o DataFlow definido acima
+
+Caso você queira instanciar um L<DataFlow::Proc> e passar parâmetros
+específicos dessa classe, você poderia usar a forma:
+
+  $flow = DataFlow->new([
+    DataFlow::Proc->new( deref => 1, p => sub { uc } ),
+	sub { scalar reverse },
+  ]);
+
+Ou, usando uma sintaxe mais "bonitinha":
+
+  $flow = DataFlow->new([
+    [ Proc => { deref => 1, p => sub { uc } } ],
+	sub { scalar reverse },
+  ]);
+
+=head2 Estendendo o DataFlow
+
+A classe L<DataFlow::Proc> pode ser estendida, de modo a criar novos 'Procs'
+reutilizáveis. Recomendamos criar essas extensões no I<namespace>
+C<DataFlow::Proc::>, mas isso não é obrigatório. Por exemplo:
+
+  package DataFlow::Proc::LC;
+
+    use Moose; extends 'DataFlow::Proc';
+
+    sub _build_p {
+      return sub { lc };
+    }
+
+  package Outro::Pkg::MeuProc;
+
+    use Moose; extends 'DataFlow::Proc';
+
+    sub _build_p {
+      return sub { 'A[['.$_.']]A' };
+    }
+
+  package main;
+
+  use DataFlow;
+
+  my $flow = DataFlow->new([
+    'LC',
+	'Outro::Pkg::MeuProc',
+  ]);
+
+  $flow->input('ALAMO!');
+  say $flow->output;
+  # imprime 'A[[alamo!]]A'
+
+O processador C<DataFlow::Proc::LC>, por ter sido definido no I<package>
+C<DataFlow::Proc::>, pode ser instanciado apenas pelo nome C<< 'LC' >>. Já
+o processador C<Outro::Pkg::MeuProc>, por estar em outro I<package>, também
+pode ser instanciado pelo nome, mas precisa ser o nome completo do I<package>.
+
+=head2 Já vem pronto!
+
+O DataFlow já possui alguns processadores prontos para usar:
+
+=over
+
+=item *
+L<DataFlow::Proc::CSV> - Converte de e para o formato CSV, usando L<Text::CSV>
+
+=item *
+L<DataFlow::Proc::DBF> - Converte de e para arquivos .DBF (dBase, Clipper, etc...) - contribuição do L<GARU|http://search.cpan.org/~garu/>!!
+
+=item *
+L<DataFlow::Proc::Encoding> - Converte a codificação dos caracteres
+
+=item *
+L<DataFlow::Proc::HTMLFilter> - Filtra conteúdo HTML utilizando expressões XPath
+
+=item *
+L<DataFlow::Proc::JSON -> Converte de e para o formato JSON
+
+=item *
+L<DataFlow::Proc::MessagePack> - Converte de e para o formato MessagePack
+
+=item *
+L<DataFlow::Proc::MultiPageURLGenerator> - Gerador de URLs paginadas
+
+=item *
+L<DataFlow::Proc::SimpleFileInput> - Carrega dados de arquivo
+
+=item *
+L<DataFlow::Proc::SimpleFileOutput> - Escreve dados para arquivo
+
+=item *
+L<DataFlow::Proc::URLRetriever> - Busca conteúdo de uma URL
+
+=item *
+L<DataFlow::Proc::YAML> - Converte de e para o formato YAML
+
+=back
+
+=head2 Usando o DataFlow
+
+O racional de um C<DataFlow::Proc> é o mesmo de um comando de Unix ou Linux
+que atua como um filtro, como o C<sort> e/ou o C<grep>. E a idéia de um
+C<DataFlow> seria a mesma de um I<pipe> na linha de comando.
+
+Por exemplo, o trecho de script abaixo, baseado no script C<ceis.pl>, obtém
+as informações das pessoas (físicas e jurídicas) que foram consideradas
+inidôneas e/ou que tenham sido sancionadas por algum órgão do governo:
+
+  my $flow = DataFlow->new([
+    [
+      MultiPageURLGenerator => {
+        produce_last_page => sub {
+          my $url = shift;
+
+          my $get  = DataFlow::Node::URLRetriever::Get->new;
+          my $html = $get->get($url);
+
+          my $texto =
+            HTML::TreeBuilder::XPath->new_from_content($html)
+              ->findvalue('//p[@class="paginaAtual"]');
+          croak q{Não conseguiu determinar a última página}
+            unless $texto;
+          return $1 if $texto =~ /\d\/(\d+)/;
+        },
+        make_page_url => sub {
+          my ( $self, $url, $page ) = @_;
+
+          my $u = URI->new($url);
+          $u->query_form( $u->query_form, Pagina => $page );
+          return $u->as_string;
+        },
+        deref => 1,
+      } 
+    ],
+    'URLRetriever',
+    [ HTMLFilter => {
+        search_xpath =>
+          '//div[@id="listagemEmpresasSancionadas"]/table/tbody/tr',
+    }],
+    [ HTMLFilter => {
+        search_xpath => '//td',
+        result_type  => 'VALUE',
+        ref_result   => 1,
+    }],
+    sub {
+      s/^\s*//; s/\s*$//;
+      return $_;
+    },
+    [ Encoding => { from => 'iso-8859-1', to => 'utf8' } ],
+	[ CSV => {
+        name           => 'csv',
+        direction      => 'CONVERT_TO',
+        converter_opts => { binary => 1, },
+		dump_output    => 1,
+    }],
+  ] );
+
+  my $base = q{http://www.portaltransparencia.gov.br} . '/'
+    . q{ceis/EmpresasSancionadas.asp?paramEmpresa=0};
+
+  $flow->input($base_url);
+  $flow->flush;
+
+Esse código imprimirá na tela (C<STDERR>) algo como:
+
+	...
+    csv >> '11.222.333/0001-44,"A CALOTEIRA LTDA.",Suspensa,19/07/10,18/07/12,"Instituto de Pesquisas Jardim Botânico do Rio de Janeiro",RJ,"DOU Seção 4 pág 112",18/09/2010'
+    csv >> '555.666.777-88,"JOSÉ DO TRAMBIQUE",Inidônea,01/02/11,31/07/11,"Comando Da Marinha - Depósito Naval de Natal",,"DOU Seção 4 pág 013",01/02/2011'
+	...
+
+Os dados já foram obtidos e "limpos", e convertidos para o formato CSV,
+para que possa ser facilmente manipulado por outros sistemas.
+
+=head2 Conclusão
+
+Este artigo ainda está parecido demais com a versão anterior. Há novidades
+óbvias, como o uso de processadores pelo nome, ao invés de obrigar o
+programador a instanciar explicitamente um objeto do tipo C<DataFlow::Proc>,
+ou ainda o uso da variável localizada C<< $_ >> na passagem de parâmetros.
+
+Mas há várias idéias de melhorias ainda a serem implementadas:
+
+=over
+
+=item * Execução em paralelo (com threads, com forks)
+
+=item * Processador para envio/recebimento de mensagens em filas (RabbitMQ, MQ, etc...)
+
+=item * Processador para geração de dados em formato RDF
+
+=item * Processador para decodificar imagens com OCR
+
+=item * Processador para executar comandos externos
+(enviar ou receber dados para esses comandos)
+
+=item * Uso de operadores (concatenação de nós seria uma cadeia)
+
+=item * Construção de nós (e principalmente cadeias de nós) a partir de especificações em JSON e/ou YAML
+
+=item * Processadores que permitam I<split> e I<join> de fluxos de informação
+
+=item * Processadores para leitura/escrita de arquivos (em andamento)
+
+=back
+
+Estas e outras idéias de melhorias estão no sistema de tickets RT do CPAN,
+em L<https://rt.cpan.org/Dist/Display.html?Queue=DataFlow>.
+
+B<Você pode ajudar!> De várias formas: escrevendo código, tanto para os módulos 
+quanto testes. Executando testes e enviando I<reports> - neste momento há, por
+exemplo, alguns reports de erro em FreeBSD que não estão ocorrendo no sistema
+dos mantenedores (Linux).
+
+=head2 Referências
+
+=over
+
+=item Portal Transparência
+
+L<http://www.portaltransparencia.gov.br/>
+
+=item Portal Transparência - CEIS (Cadastro de Empresas Inidôneas ou Sancionadas)
+
+L<http://goo.gl/UDNaG>
+
+=item OpenData-BR
+
+L<http://www.opendatabr.org/>
+
+=back
+
+=head2 Agradecimentos
+
+=over
+
+=item Breno "Garu" de Oliveira
+
+Por ter contribuído com um módulo ao projeto, o L<DataFlow::Proc::DBF>.
+
+=item REVISOR_FAVOR_COLOCAR_SEU_NOME_AQUI
+
+Por revisar este texto.
+
+=back
+
+=head2 Autor
+
+B<< Alexei "Russo" Znamensky E<lt> russoz no cpan org E<gt> >>
+
+Blog: L<http://russoz.wordpress.com/>
+
+LinkedIn:
+L<http://www.linkedin.com/profile?viewProfile=&key=754668&trk=tab_pro>
+
+=head2 Licença
+
+Este texto está licenciado sob os termos da Creative Commons by-sa,
+L<http://creativecommons.org/licenses/by-sa/3.0/br/>
+
+=begin pod:xhtml
+
+<center>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/br/"><img alt="Licença Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/br/">Creative Commons Attribution-ShareAlike License</a>.
+</center>
+
+=end pod:xhtml
+
+=cut
+
