@@ -202,6 +202,20 @@ somente se o valor de C<signature> for igual a 1.
 A versão mais recente de @Author::RUSSOZ está
 L<< disponível | https://github.com/russoz/Dist-Zilla-PluginBundle-Author-RUSSOZ/blob/master/lib/Dist/Zilla/PluginBundle/Author/RUSSOZ.pm >> no L<http://github.com>.
 
+=head2 Números de Versão
+
+O C<Dist::Zilla>, por si só, já provê a propagação do número de versão do
+módulo para os diversos arquivos que compõe a distribuição.
+
+No entanto, se você quiser ir além disso, você pode também automatizar a
+configuração (e propagação para os diversos arquivos) do numero de versão do
+módulo. Os principais plugins que fornecem essa funcionalidade são o
+L<Dist::Zilla::Plugin::Git::NextVersion> e o
+L<Dist::Zilla::Plugin::AutoVersion>.
+
+No C<@Author::RUSSOZ> colocamos uma opção C<version> B<dentro> do I<bundle>,
+que pode ter, entre outros, os valores C<gitnext> e C<auto>, respectivamente.
+
 =head2 Bundle de Teste
 
 Ao invés de listar todos esses plugins de teste, existe um I<bundle> que
@@ -260,7 +274,7 @@ autor:
   twitter_tags = #queue-base
 
 Todo e qualquer projeto agora poderá se beneficiar desse I<bundle> de plugins
-chamado Author::RUSSOZ.
+chamado C<Author::RUSSOZ>.
 
 =head2 Agradecimentos
 
