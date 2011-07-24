@@ -113,7 +113,7 @@ Os I<plugins> favoritos de cada autor também podem ser vistos como coleções, 
 por conseguinte cada um pode criar um I<bundle> com essa coleção. De fato,
 L<vários autores fazem isso|http://search.cpan.org/search?query=Dist%3A%3AZilla%3A%3APluginBundle%3A%3A&mode=dist>.
 
-=head2 Soltando o seu Bundle
+=head2 Criando o seu Bundle
 
 Para fazer o seu próprio I<bundle>, a melhor forma é usar o I<role>
 L<Dist::Zilla::Role::PluginBundle::Easy>, que já vem com o próprio
