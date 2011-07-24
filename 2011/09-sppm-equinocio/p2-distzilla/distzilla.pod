@@ -290,6 +290,12 @@ chamado C<Author::RUSSOZ>.
 
 Pelo Dist::Zilla e pela sua prestatividade.
 
+=item Fayland Lam (FAYLAND)
+
+Pelo novo release do L<Dist::Zilla::Plugin::PerlTidy> com a correção que
+forneci, permitindo que ele conviva em paz com
+L<Dist::Zilla::Plugin::ReportVersions::Tiny>.
+
 =item Comunidade São Paulo Perl Mongers
 
 Pelo companheirismo, pelas infinitas risadas, pela dedicação com que todos zelam
