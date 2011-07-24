@@ -244,6 +244,12 @@ O plugin L<Dist::Zilla::Plugin::PodWeaver> permite que vários pedaços do
 seu POD sejam gerados automagicamente, em conformidade com as boas práticas
 de documentação de Perl.
 
+=head2 Espiando o Dist::Zilla
+
+Se quiser "espiar" o que o C<Dist::Zilla> está fazendo, um plugin muito legal
+é o L<Dist::Zilla::Plugin::ReportPhase>, que mostra cada fase de execução do
+C<Dist::Zilla>.
+
 =head2 Resultado Final
 
 Hoje o C<dist.ini> do projeto C<DataFlow> está assim:
