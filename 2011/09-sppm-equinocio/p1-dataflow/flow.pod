@@ -336,10 +336,25 @@ Por revisar este texto.
 
 B<< Alexei "Russo" Znamensky E<lt> russoz no cpan org E<gt> >>
 
-Blog: L<http://russoz.wordpress.com/>
+=over
 
+=item *
+Twitter: L<russoz|http://twitter.com/#!/russoz>
+
+=item *
+Blog: L<http://russoz.org/>
+
+=item *
 LinkedIn:
 L<http://www.linkedin.com/profile?viewProfile=&key=754668&trk=tab_pro>
+
+=back
+
+=head2 Fonte
+
+O fonte deste artigo encontra-se disponível em:
+
+L<https://github.com/russoz/artigos/blob/master/2011/09-sppm-equinocio/p1-dataflow/flow.pod>
 
 =head2 Licença
 
