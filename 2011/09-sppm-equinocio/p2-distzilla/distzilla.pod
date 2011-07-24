@@ -80,7 +80,7 @@ L<repositório|https://github.com/russoz/DataFlow/blob/22f75adf696c31c72405862e7
 Enquanto era apenas um arquivo, em um projeto, não há nenhuma grande
 dificuldade. Quando precisamos de mais um plugin, acrescentamos ele ao
 C<dist.ini>, quando não queremos o removemos, e modificações estão a um
-I<Save> de distância.
+I<:wq> de distância.
 
 O problema acontece, no entanto, quando começamos a cuidade de vários módulos
 diferentes, porque o nosso conjunto "preferido" de plugins para o
@@ -143,11 +143,11 @@ L<foi|https://github.com/russoz/Dist-Zilla-PluginBundle-Author-RUSSOZ/blob/6f843
           tag_regexp => q{^.*$},
           file_name  => q{Changes},
           log_format => q{short},
-	    }
-	  ],
+        }
+      ],
 
-	  'OurPkgVersion',
-	  'AutoPrereqs',
+      'OurPkgVersion',
+      'AutoPrereqs',
     
       'ReportVersions::Tiny',
       'CompileTests',
@@ -200,7 +200,7 @@ E o seu C<dist.ini> incluirá o plugin L<Dist::Zilla::Plugin::Signature>
 somente se o valor de C<signature> for igual a 1.
 
 A versão mais recente de @Author::RUSSOZ está
-L<disponível|https://github.com/russoz/Dist-Zilla-PluginBundle-Author-RUSSOZ/blob/master/lib/Dist/Zilla/PluginBundle/Author/RUSSOZ.pm> no L<http://github.com>.
+L<< disponível | https://github.com/russoz/Dist-Zilla-PluginBundle-Author-RUSSOZ/blob/master/lib/Dist/Zilla/PluginBundle/Author/RUSSOZ.pm >> no L<http://github.com>.
 
 =head2 Bundle de Teste
 
