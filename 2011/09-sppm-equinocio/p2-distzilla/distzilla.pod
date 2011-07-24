@@ -16,7 +16,7 @@ que irá utilizar um (ou mais) desses sistemas para ser instalado em seus
 destinos finais.
 
 Neste artigo, vamos mostrar como levar a sua experiência com o C<Dist::Zilla>
-para um nível mais elevado.
+para o próximo nível.
 
 =head2 Depois de algum tempo de uso...
 
@@ -89,7 +89,7 @@ projetos. A partir daí começa um o pesadelo da sincronização de C<dist.ini>.
 
 Mas existe um jeito mais fácil.
 
-=head2 Use o Bundle dos outros
+=head2 Use o Bundle dos Outros
 
 O C<Dist::Zilla> possui um
 I<< L<role|http://search.cpan.org/perldoc?Moose::Role> >> que define um
@@ -109,8 +109,8 @@ No exemplo de C<dist.ini> acima, estamos usando I<bundles>. As linhas:
 Denotam a utilização, respectivamente do I<bundle>
 L<Dist::Zilla::PluginBundle::Basic> e L<Dist::Zilla::PluginBundle::Git>.
 
-Os nossos I<plugins> favoritos também podem ser vistos como uma coleção, e
-por conseguinte podemos criar um I<bundle> com essa coleção. De fato,
+Os I<plugins> favoritos de cada autor também podem ser vistos como coleções, e
+por conseguinte cada um pode criar um I<bundle> com essa coleção. De fato,
 L<vários autores fazem isso|http://search.cpan.org/search?query=Dist%3A%3AZilla%3A%3APluginBundle%3A%3A&mode=dist>.
 
 =head2 Soltando o seu Bundle
