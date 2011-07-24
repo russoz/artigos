@@ -303,7 +303,7 @@ L<http://www.linkedin.com/profile?viewProfile=&key=754668&trk=tab_pro>
 
 O fonte deste artigo encontra-se disponível em:
 
-L<https://github.com/russoz/artigos/tree/master/2011/03-sppm-equinocio/distzilla>
+L<https://github.com/russoz/artigos/blob/master/2011/09-sppm-equinocio/p2-distzilla/distzilla.pod>
 
 =head2 Licença
 
