@@ -1,22 +1,25 @@
 =encoding utf8
 
-=head1 DataFlow - Um Framework Para Fluxo de Dados
+=head1 DataFlow - A Saga Continua
 
-Neste artigo vamos falar um pouco mais sobre o L<DataFlow>, as melhorias que
-ocorreram desde o L<último artigo|http://sao-paulo.pm.org/equinocio/2011/mar/5>
-sobre ele, e algumas das idéias que estão guiando o seu futuro.
+Neste artigo vamos falar um pouco mais sobre o L<DataFlow>, principalmente
+sobre as melhorias que ocorreram desde o
+L<último equinócio|http://sao-paulo.pm.org/equinocio/2011/mar/5>,
+e algumas das idéias que estão guiando o seu futuro.
 
 =head2 Histórico
 
 O histórico do projeto DataFlow remonta à iniciativa 
 L<OpenData-BR|http://www.opendatabr.org/>, e já foi descrito em mais detalhes
-no artigo do Equinócio de Março da São Paulo Perl Mongers.
+no artigo anterior.
 
 Vale lembrar que o projeto ainda retém o status de I<work in progress>,
 mas as expectativas e as perspectivas são cada vez mais animadoras.
 Não perdemos de vista o objetivo de utilizar o B<DataFlow> para
 disponibilizar os dados públicos no projeto
 L<OpenData-BR|http://opendatabr.org/>.
+
+Já tivemos a nossa primeira contribuição, o L<DataFlow::Proc::DBF>.
 
 =head2 Flow, Baby, Flow
 
@@ -66,10 +69,21 @@ carga de dados.
 Criar e usar um DataFlow é bem simples e pode ser feito de várias formas.
 Vamos começar com um exemplo trivial, utilizando apenas I<subs> comuns:
 
+  use DataFlow;
+
   my $flow = DataFlow->new([
     sub { uc },
 	sub { scalar reverse },  # precisa do scalar para não tratar como array
   ]);
+
+Ou, utilizando uma sintaxe mais agradável:
+
+  use DataFlow;
+
+  my $flow = dataflow(
+    sub { uc },
+	sub { scalar reverse },
+  );
 
 Com isso nós criamos um objeto DataFlow que transforma todos os dados
 fornecidos em maiúsculas e reverte a ordem das letras. Notem que, em nenhuma
@@ -92,17 +106,17 @@ na saída:
 Caso você queira instanciar um L<DataFlow::Proc> e passar parâmetros
 específicos dessa classe, você poderia usar a forma:
 
-  $flow = DataFlow->new([
+  $flow = dataflow(
     DataFlow::Proc->new( deref => 1, p => sub { uc } ),
 	sub { scalar reverse },
-  ]);
+  );
 
-Ou, usando uma sintaxe mais "bonitinha":
+Ou, novamente usando uma sintaxe mais "bonitinha":
 
-  $flow = DataFlow->new([
+  $flow = dataflow(
     [ Proc => { deref => 1, p => sub { uc } } ],
 	sub { scalar reverse },
-  ]);
+  );
 
 =head2 Estendendo o DataFlow
 
@@ -130,10 +144,10 @@ C<DataFlow::Proc::>, mas isso não é obrigatório. Por exemplo:
 
   use DataFlow;
 
-  my $flow = DataFlow->new([
+  my $flow = dataflow(
     'LC',
 	'Outro::Pkg::MeuProc',
-  ]);
+  );
 
   $flow->input('ALAMO!');
   say $flow->output;
@@ -195,7 +209,7 @@ Por exemplo, o trecho de script abaixo, baseado no script C<ceis.pl>, obtém
 as informações das pessoas (físicas e jurídicas) que foram consideradas
 inidôneas e/ou que tenham sido sancionadas por algum órgão do governo:
 
-  my $flow = DataFlow->new([
+  my $flow = dataflow(
     [
       MultiPageURLGenerator => {
         produce_last_page => sub {
@@ -242,7 +256,7 @@ inidôneas e/ou que tenham sido sancionadas por algum órgão do governo:
         converter_opts => { binary => 1, },
 		dump_output    => 1,
     }],
-  ] );
+  );
 
   my $base = q{http://www.portaltransparencia.gov.br} . '/'
     . q{ceis/EmpresasSancionadas.asp?paramEmpresa=0};
