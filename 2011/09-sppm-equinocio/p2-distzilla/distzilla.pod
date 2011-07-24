@@ -200,7 +200,7 @@ E o C<Dist::Zilla> incluirá o plugin L<Dist::Zilla::Plugin::Signature>
 somente se o valor de C<signature> for igual a 1.
 
 A versão mais recente de C<Author::RUSSOZ> está
-L<< disponível | http://github.com/russoz/Dist-Zilla-PluginBundle-Author-RUSSOZ/blob/master/lib/Dist/Zilla/PluginBundle/Author/RUSSOZ.pm >> no L<http://github.com>.
+L<disponível|http://github.com/russoz/Dist-Zilla-PluginBundle-Author-RUSSOZ/blob/master/lib/Dist/Zilla/PluginBundle/Author/RUSSOZ.pm> no L<http://github.com>.
 
 =head2 Números de Versão
 
