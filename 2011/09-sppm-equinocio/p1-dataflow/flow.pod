@@ -73,7 +73,7 @@ Vamos começar com um exemplo trivial, utilizando apenas I<subs> comuns:
 
   my $flow = DataFlow->new([
     sub { uc },
-	sub { scalar reverse },  # precisa do scalar para não tratar como array
+    sub { scalar reverse },  # precisa do scalar para não tratar como array
   ]);
 
 Ou, utilizando uma sintaxe mais agradável:
@@ -82,7 +82,7 @@ Ou, utilizando uma sintaxe mais agradável:
 
   my $flow = dataflow(
     sub { uc },
-	sub { scalar reverse },
+    sub { scalar reverse },
   );
 
 Com isso nós criamos um objeto DataFlow que transforma todos os dados
@@ -108,14 +108,14 @@ específicos dessa classe, você poderia usar a forma:
 
   $flow = dataflow(
     DataFlow::Proc->new( deref => 1, p => sub { uc } ),
-	sub { scalar reverse },
+    sub { scalar reverse },
   );
 
 Ou, novamente usando uma sintaxe mais "bonitinha":
 
   $flow = dataflow(
     [ Proc => { deref => 1, p => sub { uc } } ],
-	sub { scalar reverse },
+    sub { scalar reverse },
   );
 
 =head2 Estendendo o DataFlow
@@ -146,7 +146,7 @@ C<DataFlow::Proc::>, mas isso não é obrigatório. Por exemplo:
 
   my $flow = dataflow(
     'LC',
-	'Outro::Pkg::MeuProc',
+    'Outro::Pkg::MeuProc',
   );
 
   $flow->input('ALAMO!');
