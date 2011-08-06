@@ -1,0 +1,443 @@
+{
+   "total_tree" : "1.232.351.131.094,15",
+   "children" : [
+      {
+         "name" : "Comércio e Serviços",
+         "data" : {
+            "link" : "/node/2",
+            "printable_value" : "R$ 2 Bi",
+            "$color" : "#c51d18",
+            "value" : "0.170",
+            "title" : "Comércio e Serviços",
+            "$area" : "0.170",
+            "valor_tabela" : "2.105.316.777,73",
+            "porcentagem" : "0.170"
+         },
+         "children" : [],
+         "id" : "2"
+      },
+      {
+         "name" : "Indústria",
+         "data" : {
+            "link" : "/node/2904",
+            "printable_value" : "R$ 1 Bi",
+            "$color" : "#002974",
+            "value" : "0.105",
+            "title" : "Indústria",
+            "$area" : "0.105",
+            "valor_tabela" : "1.298.270.523,60",
+            "porcentagem" : "0.105"
+         },
+         "children" : [],
+         "id" : "2904"
+      },
+      {
+         "name" : "Ciência e Tecnologia",
+         "data" : {
+            "link" : "/node/3256",
+            "printable_value" : "R$ 5 Bi",
+            "$color" : "#56a468",
+            "value" : "0.485",
+            "title" : "Ciência e Tecnologia",
+            "$area" : "0.485",
+            "valor_tabela" : "5.978.408.089,53",
+            "porcentagem" : "0.485"
+         },
+         "children" : [],
+         "id" : "3256"
+      },
+      {
+         "name" : "Direitos da Cidadania",
+         "data" : {
+            "link" : "/node/4339",
+            "printable_value" : "R$ 1 Bi",
+            "$color" : "#98da60",
+            "value" : "0.100",
+            "title" : "Direitos da Cidadania",
+            "$area" : "0.100",
+            "valor_tabela" : "1.240.009.028,03",
+            "porcentagem" : "0.100"
+         },
+         "children" : [],
+         "id" : "4339"
+      },
+      {
+         "name" : "Segurança Pública",
+         "data" : {
+            "link" : "/node/5940",
+            "printable_value" : "R$ 4 Bi",
+            "$color" : "#54a4a1",
+            "value" : "0.393",
+            "title" : "Segurança Pública",
+            "$area" : "0.393",
+            "valor_tabela" : "4.855.065.342,55",
+            "porcentagem" : "0.393"
+         },
+         "children" : [],
+         "id" : "5940"
+      },
+      {
+         "name" : "Comunicações",
+         "data" : {
+            "link" : "/node/7684",
+            "printable_value" : "R$ 329 Mi",
+            "$color" : "#cb3072",
+            "value" : "0.026",
+            "title" : "Comunicações",
+            "$area" : "0.026",
+            "valor_tabela" : "329.631.194,45",
+            "porcentagem" : "0.026"
+         },
+         "children" : [],
+         "id" : "7684"
+      },
+      {
+         "name" : "Administração",
+         "data" : {
+            "link" : "/node/7732",
+            "printable_value" : "R$ 5 Bi",
+            "$color" : "#4266ba",
+            "value" : "0.438",
+            "title" : "Administração",
+            "$area" : "0.438",
+            "valor_tabela" : "5.406.139.486,73",
+            "porcentagem" : "0.438"
+         },
+         "children" : [],
+         "id" : "7732"
+      },
+      {
+         "name" : "Relações Exteriores",
+         "data" : {
+            "link" : "/node/8356",
+            "printable_value" : "R$ 225 Mi",
+            "$color" : "#3b7d03",
+            "value" : "0.018",
+            "title" : "Relações Exteriores",
+            "$area" : "0.018",
+            "valor_tabela" : "225.804.126,44",
+            "porcentagem" : "0.018"
+         },
+         "children" : [],
+         "id" : "8356"
+      },
+      {
+         "name" : "Organização Agrária",
+         "data" : {
+            "link" : "/node/8397",
+            "printable_value" : "R$ 2 Bi",
+            "$color" : "#ed733c",
+            "value" : "0.232",
+            "title" : "Organização Agrária",
+            "$area" : "0.232",
+            "valor_tabela" : "2.868.828.055,06",
+            "porcentagem" : "0.232"
+         },
+         "children" : [],
+         "id" : "8397"
+      },
+      {
+         "name" : "Judiciária",
+         "data" : {
+            "link" : "/node/11555",
+            "printable_value" : "R$ 31 Mi",
+            "$color" : "#ff6281",
+            "value" : "0.002",
+            "title" : "Judiciária",
+            "$area" : "0.002",
+            "valor_tabela" : "31.237.512,78",
+            "porcentagem" : "0.002"
+         },
+         "children" : [],
+         "id" : "11555"
+      },
+      {
+         "name" : "Gestão Ambiental",
+         "data" : {
+            "link" : "/node/11587",
+            "printable_value" : "R$ 2 Bi",
+            "$color" : "#ffe94d",
+            "value" : "0.232",
+            "title" : "Gestão Ambiental",
+            "$area" : "0.232",
+            "valor_tabela" : "2.868.231.328,53",
+            "porcentagem" : "0.232"
+         },
+         "children" : [],
+         "id" : "11587"
+      },
+      {
+         "name" : "Encargos Especiais",
+         "data" : {
+            "link" : "/node/11985",
+            "$color" : "#388885",
+            "value" : "10.334",
+            "printable_value" : "R$ 127 Bi",
+            "show_title" : "true",
+            "title" : "Encargos Especiais",
+            "$area" : "10.334",
+            "valor_tabela" : "127.353.373.762,20",
+            "porcentagem" : "10.334"
+         },
+         "children" : [],
+         "id" : "11985"
+      },
+      {
+         "name" : "Saúde",
+         "data" : {
+            "link" : "/node/34432",
+            "$color" : "#36832f",
+            "value" : "3.967",
+            "printable_value" : "R$ 48 Bi",
+            "show_title" : "true",
+            "title" : "Saúde",
+            "$area" : "3.967",
+            "valor_tabela" : "48.898.273.852,86",
+            "porcentagem" : "3.967"
+         },
+         "children" : [],
+         "id" : "34432"
+      },
+      {
+         "name" : "Defesa Nacional",
+         "data" : {
+            "link" : "/node/88926",
+            "printable_value" : "R$ 7 Bi",
+            "$color" : "#4c1f7d",
+            "value" : "0.629",
+            "title" : "Defesa Nacional",
+            "$area" : "0.629",
+            "valor_tabela" : "7.752.491.964,96",
+            "porcentagem" : "0.629"
+         },
+         "children" : [],
+         "id" : "88926"
+      },
+      {
+         "name" : "Educação",
+         "data" : {
+            "link" : "/node/89384",
+            "printable_value" : "R$ 23 Bi",
+            "$color" : "#156327",
+            "value" : "1.936",
+            "title" : "Educação",
+            "$area" : "1.936",
+            "valor_tabela" : "23.864.513.999,70",
+            "porcentagem" : "1.936"
+         },
+         "children" : [],
+         "id" : "89384"
+      },
+      {
+         "name" : "Cultura",
+         "data" : {
+            "link" : "/node/117919",
+            "printable_value" : "R$ 759 Mi",
+            "$color" : "#92a112",
+            "value" : "0.061",
+            "title" : "Cultura",
+            "$area" : "0.061",
+            "valor_tabela" : "759.347.402,51",
+            "porcentagem" : "0.061"
+         },
+         "children" : [],
+         "id" : "117919"
+      },
+      {
+         "name" : "Desporto e Lazer",
+         "data" : {
+            "link" : "/node/118638",
+            "printable_value" : "R$ 591 Mi",
+            "$color" : "#85d397",
+            "value" : "0.047",
+            "title" : "Desporto e Lazer",
+            "$area" : "0.047",
+            "valor_tabela" : "591.527.564,56",
+            "porcentagem" : "0.047"
+         },
+         "children" : [],
+         "id" : "118638"
+      },
+      {
+         "name" : "Urbanismo",
+         "data" : {
+            "link" : "/node/121578",
+            "printable_value" : "R$ 3 Bi",
+            "$color" : "#4478c3",
+            "value" : "0.245",
+            "title" : "Urbanismo",
+            "$area" : "0.245",
+            "valor_tabela" : "3.030.280.902,06",
+            "porcentagem" : "0.245"
+         },
+         "children" : [],
+         "id" : "121578"
+      },
+      {
+         "name" : "Transporte",
+         "data" : {
+            "link" : "/node/126721",
+            "printable_value" : "R$ 17 Bi",
+            "$color" : "#5f6e00",
+            "value" : "1.451",
+            "title" : "Transporte",
+            "$area" : "1.451",
+            "valor_tabela" : "17.891.290.832,13",
+            "porcentagem" : "1.451"
+         },
+         "children" : [],
+         "id" : "126721"
+      },
+      {
+         "name" : "Diversos",
+         "data" : {
+            "link" : "/node/127005",
+            "$color" : "#59a9a6",
+            "value" : "74.728",
+            "printable_value" : "R$ 920 Bi",
+            "show_title" : "true",
+            "title" : "Diversos",
+            "$area" : "74.728",
+            "valor_tabela" : "920.915.380.104,04",
+            "porcentagem" : "74.728"
+         },
+         "children" : [],
+         "id" : "127005"
+      },
+      {
+         "name" : "Legislativa",
+         "data" : {
+            "link" : "/node/127008",
+            "printable_value" : "R$ 1 Mi",
+            "$color" : "#eba12f",
+            "value" : "0.000",
+            "title" : "Legislativa",
+            "$area" : "0.000",
+            "valor_tabela" : "1.289.692,23",
+            "porcentagem" : "0.000"
+         },
+         "children" : [],
+         "id" : "127008"
+      },
+      {
+         "name" : "Essencial à Justiça",
+         "data" : {
+            "link" : "/node/127026",
+            "printable_value" : "R$ 318 Mi",
+            "$color" : "#4e82cd",
+            "value" : "0.025",
+            "title" : "Essencial à Justiça",
+            "$area" : "0.025",
+            "valor_tabela" : "318.828.696,37",
+            "porcentagem" : "0.025"
+         },
+         "children" : [],
+         "id" : "127026"
+      },
+      {
+         "name" : "Saneamento",
+         "data" : {
+            "link" : "/node/127096",
+            "printable_value" : "R$ 1 Bi",
+            "$color" : "#21716e",
+            "value" : "0.127",
+            "title" : "Saneamento",
+            "$area" : "0.127",
+            "valor_tabela" : "1.568.458.508,99",
+            "porcentagem" : "0.127"
+         },
+         "children" : [],
+         "id" : "127096"
+      },
+      {
+         "name" : "Assistência Social",
+         "data" : {
+            "link" : "/node/127497",
+            "printable_value" : "R$ 12 Bi",
+            "$color" : "#72c6ff",
+            "value" : "0.986",
+            "title" : "Assistência Social",
+            "$area" : "0.986",
+            "valor_tabela" : "12.154.723.407,19",
+            "porcentagem" : "0.986"
+         },
+         "children" : [],
+         "id" : "127497"
+      },
+      {
+         "name" : "Energia",
+         "data" : {
+            "link" : "/node/165446",
+            "printable_value" : "R$ 351 Mi",
+            "$color" : "#ae0601",
+            "value" : "0.028",
+            "title" : "Energia",
+            "$area" : "0.028",
+            "valor_tabela" : "351.174.488,78",
+            "porcentagem" : "0.028"
+         },
+         "children" : [],
+         "id" : "165446"
+      },
+      {
+         "name" : "Previdência Social",
+         "data" : {
+            "link" : "/node/165615",
+            "printable_value" : "R$ 2 Bi",
+            "$color" : "#97a617",
+            "value" : "0.175",
+            "title" : "Previdência Social",
+            "$area" : "0.175",
+            "valor_tabela" : "2.159.175.207,33",
+            "porcentagem" : "0.175"
+         },
+         "children" : [],
+         "id" : "165615"
+      },
+      {
+         "name" : "Habitação",
+         "data" : {
+            "link" : "/node/165674",
+            "printable_value" : "R$ 231 Mi",
+            "$color" : "#380035",
+            "value" : "0.018",
+            "title" : "Habitação",
+            "$area" : "0.018",
+            "valor_tabela" : "231.863.974,06",
+            "porcentagem" : "0.018"
+         },
+         "children" : [],
+         "id" : "165674"
+      },
+      {
+         "name" : "Agricultura",
+         "data" : {
+            "link" : "/node/167157",
+            "printable_value" : "R$ 6 Bi",
+            "$color" : "#000037",
+            "value" : "0.549",
+            "title" : "Agricultura",
+            "$area" : "0.549",
+            "valor_tabela" : "6.766.986.417,93",
+            "porcentagem" : "0.549"
+         },
+         "children" : [],
+         "id" : "167157"
+      },
+      {
+         "name" : "Trabalho",
+         "data" : {
+            "link" : "/node/169001",
+            "printable_value" : "R$ 30 Bi",
+            "$color" : "#2f2b87",
+            "value" : "2.477",
+            "title" : "Trabalho",
+            "$area" : "2.477",
+            "valor_tabela" : "30.535.208.850,82",
+            "porcentagem" : "2.477"
+         },
+         "children" : [],
+         "id" : "169001"
+      }
+   ]
+}
